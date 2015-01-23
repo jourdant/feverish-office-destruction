@@ -1,60 +1,95 @@
 (function (global, document) {
 
-    var viewModel = {
-        stage: null,
-        renderer: ""
-    };
+    //
+    // GAME VARIABLES
+    //
+    var stage = null;
+    var renderer = null;
+    var sprites = new Array();
+   
+    //
+    // INITIALISERS
+    //
+    function initialiseRenderer() {
+        //create an new instance of a pixi stage
+        stage = new PIXI.Stage(0x6699FF);
 
-    var loaded = function () {
-        //set up data bindings from viewModel to dom elements
-        //dataBind($("#input_username"), viewModel);
+        //create a renderer instance
+        renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
 
-        // create an new instance of a pixi stage
-        viewModel.stage = new PIXI.Stage(0x66FF99);
-        
-        // create a renderer instance
-        viewModel.renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
-        
-        // add the renderer view element to the DOM
-        document.body.appendChild(viewModel.renderer.view);
-        
-        requestAnimFrame( animate );
-        
-        // create a texture from an image path
-        var texture = PIXI.Texture.fromImage("./img/sprites/bunny.png");
-        // create a new Sprite using the texture
-        var bunny = new PIXI.Sprite(texture);
-        
-        // center the sprites anchor point
-        bunny.anchor.x = 0.5;
-        bunny.anchor.y = 0.5;
-        
-        // move the sprite t the center of the screen
-        bunny.position.x = window.innerWidth/2;
-        bunny.position.y = window.innerHeight/2;
-        
-        viewModel.stage.addChild(bunny);
-        
-        function animate() {
-            requestAnimFrame( animate );
-            // just for fun, lets rotate mr rabbit a little
-            bunny.rotation += 0.1;
-            // render the stage   
-            viewModel.renderer.render(viewModel.stage);
+        //add the renderer view element to the DOM
+        document.body.appendChild(renderer.view);
+
+        //hook up render event to browser
+        requestAnimFrame(render);
+    }
+
+    function initialiseSprites() {
+        var bunny = Sprite("./img/sprites/bunny.png", window.innerWidth/2, window.innerHeight/2);
+        sprites[sprites.length] = bunny;
+        stage.addChild(bunny);
+    }
+
+    function Sprite (sprite_url, x, y) {
+        var texture = PIXI.Texture.fromImage(sprite_url);
+        var sprite = new PIXI.Sprite(texture);
+        sprite.position.x = x;
+        sprite.position.y = y;
+        return sprite;
+    }
+
+
+
+    //
+    // EVENT HANDLERS
+    //
+    function loaded() {
+        //create webgl hook + pixi stage
+        initialiseRenderer();
+
+        //create sprites
+        initialiseSprites();
+    }
+
+    function unloading() {
+        //cleanup
+    }
+
+    function handleInput(event) {
+        switch (event.keyCode) {
+            case 37:
+                console.log("left");
+                break;
+
+            case 38:
+                console.log("up");
+                break;
+
+            case 39:
+                console.log("right");
+                break;
+
+            case 40:
+                console.log("down");
+                break;
         }
-    };
+    }
 
-    var unloading = function () {
-        //set up data bindings from viewModel to dom elements
-        //dataBind($("#input_username"), viewModel);
+    function render() {
+        var changed = false;
+
+        //if (Math.floor((Math.random() * 100) + 1) > 75) {
+            stage.getChildAt(0).rotation += 0.1;
+            changed = true;
+        //}
+
+        if (changed == true) { renderer.render(stage); }
+        requestAnimFrame(render);
+    }
 
 
-
-    };
-
-
-
-    //DOMContentLoaded is more efficient than body.onload.
+    //hook up DOM events
     document.addEventListener("DOMContentLoaded", loaded, false);
     document.addEventListener("beforeunload", unloading, false);
+    window.addEventListener("keydown", handleInput, false);
 })(this, document);
