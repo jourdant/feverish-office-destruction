@@ -9,6 +9,8 @@
 	var playerposition = {x:0, y:0};
 	var winnumber = 0;
     var keystate = new Array();
+    var lastkey = null;
+    var lastkeyurgency = 0;
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
@@ -290,7 +292,8 @@
 			&& (!east || (here.right && !here.right.door) || isObstructed(east))
 			&& (!south || (here.down && !here.down.door) || isObstructed(south))
 			&& (!west || (west.right && !west.right.door) || isObstructed(west))) {
-			clearInterval(deathTicker);
+			clearInterval(interjectionTicker);
+            clearInterval(deathTicker);
 			gameOver();
 		}
 	}
@@ -330,6 +333,7 @@
 		
 		Fire.begin();
 		
+        interjectionTicker = setInterval(checkForInterjection, 500);
 		deathTicker = setInterval(checkForDeath, 1000);
 	}
 
@@ -353,11 +357,28 @@
     }
 
     
+    function checkForInterjection() {
+        if (lastkey) {
+            var currentTime = new Date();
+            var diff = currentTime.getTime() - lastkey.getTime()
+
+            var seconds = Math.abs(diff / 1000);
+            var sound = null;
+            if (seconds > 10 && lastkeyurgency == 3) { sound = SOUNDS.QUICKINEEDTOGOSOMEWHERE; lastkeyurgency++;}
+            else if (seconds > 6 && lastkeyurgency == 1) { sound = SOUNDS.OKWHATSHOULDIDONOW; lastkeyurgency++;}
+            else if (seconds > 3 && lastkeyurgency == 0) { sound = SOUNDS.OUCHTHATSHOT; lastkeyurgency++;}
+
+            if (sound) { createjs.Sound.play(sound); }
+        } 
+    }
+
     function keydown(event) {
         if (event.keyCode >= 37 && event.keyCode <= 40) {
             if (keystate[event.keyCode] == false) {
                 keystate[event.keyCode] = true;
                 handleInput(event);
+                lastkey = new Date();
+                lastkeyurgency = 0;
             }
         }
     }
