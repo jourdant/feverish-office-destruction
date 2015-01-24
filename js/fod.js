@@ -19,6 +19,7 @@
 	var DOORTEXTURE = "./img/sprites/door.png";
     var STAIRSTECTURE = "./img/sprites/stairs.png";
     var GAMEOVERTEXTURE = "./img/sprites/gameover.png";
+    var FIRETEXTURE = "./img/sprites/fire.png";
 
     var SOUNDS = {};
 
@@ -33,6 +34,7 @@
          queue.loadFile({id:"doortexture", src: DOORTEXTURE});
          queue.loadFile({id:"stairstexture", src: STAIRSTECTURE});
          queue.loadFile({id:"gameovertexture", src: GAMEOVERTEXTURE});
+         queue.loadFile({id:"firetexture", src: FIRETEXTURE});
 
          function handleComplete() {
             console.log("Assets loaded.");
@@ -182,7 +184,7 @@
 				var newSpace = Map.spaces[newx][newy]
 				if(newSpace.right && !newSpace.right.door) {
 					iCantGoThatWay();
-				} else if(checkNewSpace(newSpace)) {
+				} else if(checkNewSpace(newSpace, {x: newx, y:newy})) {
 					move(currentSpace, newSpace, newx, newy);
 				}
                 break;
@@ -199,7 +201,7 @@
 				var newSpace = Map.spaces[newx][newy]
 				if(newSpace.down && !newSpace.down.door) {
 					iCantGoThatWay();
-				} else if(checkNewSpace(newSpace)) {
+				} else if(checkNewSpace(newSpace, {x: newx, y:newy})) {
 					move(currentSpace, newSpace, newx, newy);
 				}
                 break;
@@ -216,7 +218,7 @@
 				var newSpace = Map.spaces[newx][newy]
 				if(currentSpace.right && !currentSpace.right.door) {
 					iCantGoThatWay();
-				} else if(checkNewSpace(newSpace)) {
+				} else if(checkNewSpace(newSpace, {x: newx, y:newy})) {
 					move(currentSpace, newSpace, newx, newy);
 				}
                 break;
@@ -233,7 +235,7 @@
 				var newSpace = Map.spaces[newx][newy]
 				if(currentSpace.down && !currentSpace.down.door) {
 					iCantGoThatWay();
-				} else if(checkNewSpace(newSpace)) {
+				} else if(checkNewSpace(newSpace, {x: newx, y:newy})) {
 					move(currentSpace, newSpace, newx, newy);
 				}
                 break;
@@ -279,9 +281,11 @@
 		alert("OH NO THE CAAAAATS");
 	}
 	
-	function checkNewSpace(newSpace) {
+	function checkNewSpace(newSpace, newSpacePosition) {
 		if(newSpace.fire){
 			fire();
+			var sprite = createSprite(FIRETEXTURE, newSpacePosition.x*128, newSpacePosition.y*128);
+			blueprint.addChild(sprite);
 			return false;
 		} else if(newSpace.cat){ 
 			return false;
