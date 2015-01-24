@@ -28,6 +28,9 @@
          
          function handleComplete() {
             console.log("Assets loaded.");
+            //create webgl hook + pixi stage
+            initialiseRenderer();
+            startLevel();
              /*createjs.Sound.play("sound");
              var image = queue.getResult("myImage");
              document.body.appendChild(image);*/
@@ -223,7 +226,12 @@
 	}
 	
 	function fire() {
-		createjs.Sound.play(SOUNDS.ITBURNS);
+		if (fire.firelocations.length < 50)
+            createjs.Sound.play(SOUNDS.ITBURNS);
+        } 
+        else {
+            createjs.Sound.play(SOUNDS.)
+        }
 	}
 	
 	function cat() {
@@ -252,16 +260,14 @@
 	}
 
     function loaded() {
+        //size window and set scale
+        handleResize();
+
         //preload assets
         initialiseAssets();
 
         //initialise sound
         initialiseSound();
-		
-        //create webgl hook + pixi stage
-        initialiseRenderer();
-		
-		startLevel();
     }
 	
 	function startLevel() {
@@ -281,10 +287,16 @@
         //cleanup
     }
 
+    function handleResize() {
+        var dimension = window.innerHeight < window.innerWidth ? window.innerHeight : window.innerWidth;
+
+    }
+
 
 
     //hook up DOM events
     document.addEventListener("DOMContentLoaded", loaded, false);
     document.addEventListener("beforeunload", unloading, false);
     window.addEventListener("keydown", handleInput, false);
+    window.addEventListener("keydown", handleResize, false);
 })(this, document);
