@@ -7,6 +7,7 @@
     var renderer = null;
     var blueprint = new PIXI.DisplayObjectContainer();
 	var playerposition = {x:0, y:0};
+	var winnumber = 0;
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
@@ -48,6 +49,8 @@
         SOUNDS.QUICKINEEDTOGOSOMEWHERE = "QUICKINEEDTOGOSOMEWHERE";
         SOUNDS.QUICKWHATSHOULDIDONOW = "QUICKWHATSHOULDIDONOW";
         SOUNDS.SCREWTHIS = "SCREWTHIS";
+		SOUNDS.IVEREACHEDTHESTAIRS= "IVEREACHEDTHESTAIRS";
+		SOUNDS.OHNOMORESTAIRS= "OHNOMORESTAIRS";
 
         createjs.Sound.registerSound("sounds/processed/help.mp3", SOUNDS.HELP);
         createjs.Sound.registerSound("sounds/processed/thatsanicefire.mp3", SOUNDS.THATSANICEFIRE);
@@ -58,6 +61,8 @@
         createjs.Sound.registerSound("sounds/processed/quickineedtogosomewhere.mp3", SOUNDS.QUICKINEEDTOGOSOMEWHERE);
         createjs.Sound.registerSound("sounds/processed/quickwhatshouldidonow.mp3", SOUNDS.QUICKWHATSHOULDIDONOW);
         createjs.Sound.registerSound("sounds/processed/screwthisimjustgonnataketheelevator.mp3", SOUNDS.SCREWTHIS);
+		createjs.Sound.registerSound("sounds/processed/ivereachedthestairs.mp3", SOUNDS.IVEREACHEDTHESTAIRS);
+		createjs.Sound.registerSound("sounds/processed/ohnomorestairs.mp3", SOUNDS.OHNOMORESTAIRS);
     }
 
     function initialiseRenderer() {
@@ -216,7 +221,13 @@
     }
 	
 	function win() {
-		alert("Win!");
+		if(winnumber > 0) {
+			createjs.Sound.play(SOUNDS.OHNOMORESTAIRS);
+		}
+		else {	
+			createjs.Sound.play(SOUNDS.IVEREACHEDTHESTAIRS);
+		}
+		winnumber++;
 		startLevel();
 	}
 	
@@ -241,7 +252,7 @@
 	}
 	
 	function cat() {
-		alert("OH GOT THE CAAAAATS");
+		alert("OH NO THE CAAAAATS");
 	}
 	
 	function checkNewSpace(newSpace) {
@@ -268,8 +279,8 @@
 	function checkForDeath() {
 		var here = Map.spaces[playerposition.x][playerposition.y];
 		var north = playerposition.y > 0 ? Map.spaces[playerposition.x][playerposition.y - 1] : null;
-		var east = playerposition.x < Map.WIDTH ? Map.spaces[playerposition.x + 1][playerposition.y] : null;
-		var south = playerposition.y < Map.HEIGHT ? Map.spaces[playerposition.x][playerposition.y + 1] : null;
+		var east = playerposition.x + 1 < Map.WIDTH ? Map.spaces[playerposition.x + 1][playerposition.y] : null;
+		var south = playerposition.y + 1 < Map.HEIGHT ? Map.spaces[playerposition.x][playerposition.y + 1] : null;
 		var west = playerposition.x > 0 ? Map.spaces[playerposition.x - 1][playerposition.y] : null;
 		
 		if((!north || (north.down && !north.down.door) || isObstructed(north))
@@ -317,7 +328,7 @@
 		
 		Fire.begin();
 		
-		deathTicker = setInterval(checkForDeath, 100);
+		deathTicker = setInterval(checkForDeath, 1000);
 	}
 
     function unloading() {
