@@ -6,10 +6,8 @@
 	
 	Map = {};
 	Map.spaces = [];
-	Map.walls = [];
 	for(var i = 0; i < WIDTH; i++) {
 		Map.spaces[i] = [];
-		Map.walls[i] = [];
 	}
 	Map.generateMap = function() {
 		var rooms = [];
@@ -107,12 +105,12 @@
 	function constructWalls(rooms) {
 		for(var j = 0; j < WIDTH; j++) {
 			for(var k = 0; k < HEIGHT; k++) {
-				Map.walls[j][k] = {};
+				Map.spaces[j][k] = {};
 				if(j + 1 < WIDTH && rooms[j+1][k] != rooms[j][k]) {
-					Map.walls[j][k].right = true;
+					Map.spaces[j][k].right = true;
 				}
 				if(k + 1 < HEIGHT && rooms[j][k+1] != rooms[j][k]) {
-					Map.walls[j][k].down = true;
+					Map.spaces[j][k].down = true;
 				}
 			}
 		}
