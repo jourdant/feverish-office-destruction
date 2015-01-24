@@ -93,10 +93,10 @@
 		for(var x = 0; x < array.length; x++){
 			var it = "";
 			for(var y = 0; y < array[x].length;y++){
-				if(array[x][y] < 10) {
+				if(array[y][x] < 10) {
 					it += " ";
 				}
-				it += array[x][y] + " ";
+				it += array[y][x] + " ";
 			}
 			console.log(it)
 		}
