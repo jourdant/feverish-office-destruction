@@ -329,6 +329,7 @@
 	}
 	
 	function gameOver() {
+        createjs.Sound.stop();
 		createjs.Sound.play(SOUNDS.SCREWTHIS);
 
         var message = createSprite(GAMEOVERTEXTURE, 0, 0);
