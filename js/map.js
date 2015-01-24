@@ -6,13 +6,14 @@
 	
 	Map = {};
 	Map.spaces = [];
-	for(var i = 0; i < WIDTH; i++) {
-		Map.spaces[i] = [];
-		for(var j = 0; j < HEIGHT; j++) {
-			Map.spaces[i][j] = {};
-		}
-	}
 	Map.generateMap = function() {
+		for(var i = 0; i < WIDTH; i++) {
+			Map.spaces[i] = [];
+			for(var j = 0; j < HEIGHT; j++) {
+				Map.spaces[i][j] = {};
+			}
+		}
+		
 		var rooms = [];
 		
 		for(var i = 0; i < WIDTH; i++) {
