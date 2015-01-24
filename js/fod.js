@@ -6,8 +6,8 @@
     var stage = null;
     var renderer = null;
 	
-	var SCALEFACTOR = 0.375;
-
+	var SCALEFACTOR = 0.25;
+    var PAGESCALE = 0.375;
 
     //
     // INITIALISERS
@@ -48,15 +48,15 @@
 					blueprint.addChild(Sprite("./img/sprites/wall.png", (x + 1)*128 - (70 * SCALEFACTOR) / 2, y*128));
 				}
 				if(Map.spaces[x][y].down) {
-					var sprite = Sprite("./img/sprites/wall.png", x*128, (y + 1)*128);// + (70 * SCALEFACTOR) / 2);
+					var sprite = Sprite("./img/sprites/wall.png", x*128, (y + 1)*128 + (70 * SCALEFACTOR) / 2);
 					sprite.rotation = -90 * Math.PI / 180;
 					blueprint.addChild(sprite);
 				}
 			}
 		}
 
-        blueprint.scale.x = SCALEFACTOR;
-        blueprint.scale.y = SCALEFACTOR;
+        blueprint.scale.x = PAGESCALE;
+        blueprint.scale.y = PAGESCALE;
         stage.addChild(blueprint);
 
         //render base map
