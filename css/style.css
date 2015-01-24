@@ -1,3 +1,9 @@
+@font-face {
+  font-family: bruss;
+  src: url('../fonts/Bruss.woff') format('woff'), /* Pretty Modern Browsers */
+		url('../fonts/Bruss.ttf')  format('truetype'); /* Safari, Android, iOS */
+}
+
 html { 
   background: url("../img/background.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -47,4 +53,15 @@ body {
 	left: 0;
 	right: 0;
 	margin: auto;
+}
+
+#level_text {
+	bottom: 0;
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	margin-bottom: 2%;
+	color: white;
+	font-family: Bruss;
+	font-size: xx-large;
 }
