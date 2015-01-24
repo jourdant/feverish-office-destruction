@@ -35,6 +35,8 @@
             console.log("Assets loaded.");
             //create webgl hook + pixi stage
             initialiseRenderer();
+            //size window and set scale
+            handleResize();
             startLevel();
          }
     }
@@ -300,15 +302,14 @@
 		createjs.Sound.play(SOUNDS.SCREWTHIS);
 
         var message = createSprite(GAMEOVERTEXTURE, 0, 0);
+        message.scale.x = 1;
+        message.scale.y = 1;
         blueprint.addChild(message);
 
 		setTimeout(startLevel, 5000);
 	}
 
     function loaded() {
-        //size window and set scale
-        handleResize();
-
         //preload assets
         initialiseAssets();
 
@@ -338,8 +339,15 @@
     function handleResize() {
         /*var height = window.innerHeight * 0.9;
         blueprint.scale.x = height * 0.7;
-        blueprint.scale.y = height * 0.7;*/
+        blueprint.scale.y = height * 0.7;
 
+        var container = document.getElementById("game_container");
+        container.offsetWidth = container.offsetHeight;
+
+        var border = document.getElementById("game_border");
+        border.offsetWidth = border.offsetHeight;*/
+
+        //renderer.resize(border.offsetHeight, border.offsetHeight);
     }
 
 
@@ -348,5 +356,5 @@
     document.addEventListener("DOMContentLoaded", loaded, false);
     document.addEventListener("beforeunload", unloading, false);
     window.addEventListener("keydown", handleInput, false);
-    window.addEventListener("keydown", handleResize, false);
+    window.addEventListener("resize", handleResize, false);
 })(this, document);
