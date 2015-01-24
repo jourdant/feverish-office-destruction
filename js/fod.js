@@ -63,6 +63,8 @@
 		SOUNDS.IVEREACHEDTHESTAIRS= "IVEREACHEDTHESTAIRS";
 		SOUNDS.OHNOMORESTAIRS= "OHNOMORESTAIRS";
         SOUNDS.MUSIC= "MUSIC";
+        SOUNDS.HELLO = "HELLO";
+        SOUNDS.AREYOUTHERE ="AREYOUTHERE";
 
         createjs.Sound.registerSound("sounds/processed/help.mp3", SOUNDS.HELP);
         createjs.Sound.registerSound("sounds/processed/thatsanicefire.mp3", SOUNDS.THATSANICEFIRE);
@@ -76,6 +78,8 @@
 		createjs.Sound.registerSound("sounds/processed/ivereachedthestairs.mp3", SOUNDS.IVEREACHEDTHESTAIRS);
 		createjs.Sound.registerSound("sounds/processed/ohnomorestairs.mp3", SOUNDS.OHNOMORESTAIRS);
         createjs.Sound.registerSound("sounds/processed/elevatormusicloop.mp3", SOUNDS.MUSIC);
+        createjs.Sound.registerSound("sounds/processed/hello.mp3", SOUNDS.HELLO);
+        createjs.Sound.registerSound("sounds/processed/areyouthere.mp3", SOUNDS.AREYOUTHERE);
     }
 
     function initialiseRenderer() {
@@ -369,9 +373,12 @@
 
             var seconds = Math.abs(diff / 1000);
             var sound = null;
-            if (seconds > 14 && lastkeyurgency == 2) { sound = SOUNDS.HELP; lastkeyurgency++;}
-            else if (seconds > 9 && lastkeyurgency == 1) { sound = SOUNDS.QUICKINEEDTOGOSOMEWHERE; lastkeyurgency++;}
+            if (seconds > 20 && lastkeyurgency == 4) {sound = SOUNDS.HELP; lastkeyurgency++;}
+            else if (seconds > 17 && lastkeyurgency == 3) { sound = SOUNDS.QUICKINEEDTOGOSOMEWHERE; lastkeyurgency++;}
+            else if (seconds > 14 && lastkeyurgency == 2) { sound = SOUNDS.AREYOUTHERE; lastkeyurgency++;}
+            else if (seconds > 9 && lastkeyurgency == 1) { sound = SOUNDS.HELLO; lastkeyurgency++;}
             else if (seconds > 3 && lastkeyurgency == 0) { sound = SOUNDS.OKWHATSHOULDIDONOW; lastkeyurgency++;}
+
 
             if (sound) { createjs.Sound.play(sound); }
         }
