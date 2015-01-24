@@ -1,10 +1,12 @@
 (function() {
 	Fire = {};
 	var fireLocations = [];
+	Fire.fireLocations = fireLocations;
 	var firetimer;
 	
 	var fireTimeout = 1000;
 	Fire.begin = function() {
+		fireLocations = [];
 		var firestartX = Math.floor(Math.random() * Map.WIDTH);
 		var firestartY = Math.floor(Math.random() * Map.HEIGHT);
 		
@@ -26,7 +28,7 @@
 	function triggerFire() {
 		for(var i = 0; i < fireLocations.length; i++) {
 			var fireLocation = fireLocations[i];
-			if(Math.random() <0.2) {
+			if(Math.random() <10) {
 				var direction = Math.floor(Math.random() * 4);
 				var mapSpace = Map.spaces[fireLocation.x][fireLocation.y];
 				
