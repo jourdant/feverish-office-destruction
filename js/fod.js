@@ -226,11 +226,11 @@
 	}
 	
 	function fire() {
-		if (fire.firelocations.length < 50)
-            createjs.Sound.play(SOUNDS.ITBURNS);
-        } 
+		if (Fire.fireLocations.length < 100) {
+            createjs.Sound.play(SOUNDS.THATSANICEFIRE);
+        }
         else {
-            createjs.Sound.play(SOUNDS.)
+            createjs.Sound.play(SOUNDS.ITBURNS);
         }
 	}
 	
