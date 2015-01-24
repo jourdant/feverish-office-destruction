@@ -1,22 +1,28 @@
 (function() {
-	var WIDTH = 16;
-	var HEIGHT = 16;
+	Map = {};
+	Map.WIDTH = 16;
+	Map.HEIGHT = 16;
 	var MAX_ROOMSIZE = 20;
 	var MIN_ROOMSIZE = 16;
 	
-	Map = {};
+	Direction = {};
+	Direction.RIGHT = 0;
+	Direction.DOWN = 1;
+	Direction.LEFT = 2;
+	Direction.UP = 3;
+	
 	Map.spaces = [];
 	Map.generateMap = function() {
-		for(var i = 0; i < WIDTH; i++) {
+		for(var i = 0; i < Map.WIDTH; i++) {
 			Map.spaces[i] = [];
-			for(var j = 0; j < HEIGHT; j++) {
+			for(var j = 0; j < Map.HEIGHT; j++) {
 				Map.spaces[i][j] = {};
 			}
 		}
 		
 		var rooms = [];
 		
-		for(var i = 0; i < WIDTH; i++) {
+		for(var i = 0; i < Map.WIDTH; i++) {
 			rooms[i] = [];
 		}
 		
@@ -24,7 +30,7 @@
 		var roomsize = 0;
 		var roomcounter = 0;
 		var roomnumber = 0;
-		while(squaresCounter < WIDTH * HEIGHT) {
+		while(squaresCounter < Map.WIDTH * Map.HEIGHT) {
 			roomsize = generateRoomSize();
 			roomnumber++;
 			
@@ -33,7 +39,7 @@
 			roomcounter++;
 			
 			while(roomcounter < roomsize) {
-				direction = Math.floor(Math.random() * 4);
+				var direction = Math.floor(Math.random() * 4);
 				var found = false;
 				
 				for(var i = 0; i < 4; i++) {
@@ -42,19 +48,19 @@
 						y : location.y
 					}
 					
-					if(direction == 0) {
+					if(direction == Direction.RIGHT) {
 						newLocation.x++;
-					} else if (direction == 1){
+					} else if (direction == Direction.DOWN){
 						newLocation.y++;
-					} else if (direction == 2){
+					} else if (direction == Direction.LEFT){
 						newLocation.x--;
-					} else if (direction == 3){
+					} else if (direction == Direction.UP){
 						newLocation.y--;
 					}
 					
-					if(newLocation.x < WIDTH 
+					if(newLocation.x < Map.WIDTH 
 						&& newLocation.x >= 0 
-						&& newLocation.y < HEIGHT 
+						&& newLocation.y < Map.HEIGHT 
 						&& newLocation.y >= 0
 						&& !rooms[newLocation.x][newLocation.y]) {
 						location = newLocation;
@@ -87,7 +93,7 @@
 				return {x:j, y:k};
 			} else {
 				j++;
-				if(j == WIDTH) {
+				if(j == Map.WIDTH) {
 					j = 0;
 					k++;
 				}
@@ -109,12 +115,12 @@
 	}
 	
 	function constructWalls(rooms) {
-		for(var j = 0; j < WIDTH; j++) {
-			for(var k = 0; k < HEIGHT; k++) {
-				if(j + 1 < WIDTH && rooms[j+1][k] != rooms[j][k]) {
+		for(var j = 0; j < Map.WIDTH; j++) {
+			for(var k = 0; k < Map.HEIGHT; k++) {
+				if(j + 1 < Map.WIDTH && rooms[j+1][k] != rooms[j][k]) {
 					Map.spaces[j][k].right = {door: Math.random() > 0.65};
 				}
-				if(k + 1 < HEIGHT && rooms[j][k+1] != rooms[j][k]) {
+				if(k + 1 < Map.HEIGHT && rooms[j][k+1] != rooms[j][k]) {
 					Map.spaces[j][k].down = {door: Math.random() > 0.65};
 				}
 			}

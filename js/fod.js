@@ -86,8 +86,8 @@
         }
 
         //add code here for adding walls to map
-        for (var x = 0; x < Map.spaces.length; x++) {
-            for (var y = 0; y < Map.spaces[0].length; y++) {
+        for (var x = 0; x < Map.WIDTH; x++) {
+            for (var y = 0; y < Map.HEIGHT; y++) {
 				if(Map.spaces[x][y].right) {
 					var texture = Map.spaces[x][y].right.door ? DOORTEXTURE : WALLTEXTURE;
 					blueprint.addChild(createSprite(texture, (x + 1)*128 - (70 * SCALEFACTOR) / 2, y*128));
@@ -101,7 +101,7 @@
 			}
 		}
 		
-		var sprite = createSprite(STAIRSTECTURE, (Map.spaces.length - 1) * 128, (Map.spaces[0].length - 1) * 128);
+		var sprite = createSprite(STAIRSTECTURE, (Map.WIDTH - 1) * 128, (Map.HEIGHT - 1) * 128);
 		blueprint.addChild(sprite);
 
         blueprint.scale.x = PAGESCALE;
@@ -201,24 +201,21 @@
 				}
                 break;
         }
-		if(playerposition.x == Map.spaces.length - 1 && playerposition.y == Map.spaces[0].length - 1) {
+		if(playerposition.x == Map.WIDTH - 1 && playerposition.y == Map.HEIGHT - 1) {
 			win();
 		}
     }
 	
 	function win() {
 		alert("Win!");
-		Map.generateMap();
-		playerposition.x = 0;
-		playerposition.y = 0;
-		initialiseSprites();
+		startLevel();
 	}
 	
 	function isOutOfBounds(newx, newy) {
 		return newx < 0
 			|| newy < 0
-			|| newx >= Map.spaces.length
-			|| newy >= Map.spaces[0].length
+			|| newx >= Map.WIDTH
+			|| newy >= Map.HEIGHT
 	}
 	
 	function iCantGoThatWay() {
@@ -260,16 +257,25 @@
 
         //initialise sound
         initialiseSound();
-
-        //generate map
-		Map.generateMap();
 		
         //create webgl hook + pixi stage
         initialiseRenderer();
+		
+		startLevel();
+    }
+	
+	function startLevel() {
+        //generate map
+		Map.generateMap();
+		
+		playerposition.x = 0;
+		playerposition.y = 0;
 
         //create sprites
         initialiseSprites();
-    }
+		
+		Fire.begin();
+	}
 
     function unloading() {
         //cleanup
