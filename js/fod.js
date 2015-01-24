@@ -256,10 +256,11 @@
 	}
 	
 	function fire() {
-		if (Fire.fireLocations.length < 100) {
+		if (Fire.fireLocations.length < 50) {
             createjs.Sound.play(SOUNDS.THATSANICEFIRE);
-        }
-        else {
+        } else if(Fire.fireLocations.length < 100) {
+			createjs.Sound.play(SOUNDS.OUCHTHATSHOT);
+        }else {
             createjs.Sound.play(SOUNDS.ITBURNS);
         }
 	}
