@@ -5,6 +5,7 @@
     //
     var stage = null;
     var renderer = null;
+    var blueprint = new PIXI.DisplayObjectContainer();
 	var playerposition = {x:0, y:0};
 	
 	var SCALEFACTOR = 0.25;
@@ -13,6 +14,7 @@
 	var WALLTEXTURE = "./img/sprites/wall.png";
 	var DOORTEXTURE = "./img/sprites/door.png";
     var STAIRSTECTURE = "./img/sprites/stairs.png";
+    var GAMEOVERTEXTURE = "./img/sprites/gameover.png";
 
     var SOUNDS = {};
 
@@ -25,15 +27,14 @@
          queue.loadFile({id:"blueprinttexture", src: BLUEPRINTTEXTURE});
          queue.loadFile({id:"walltexture", src: WALLTEXTURE});
          queue.loadFile({id:"doortexture", src: DOORTEXTURE});
-         
+         queue.loadFile({id:"stairstexture", src: STAIRSTECTURE});
+         queue.loadFile({id:"gameovertexture", src: GAMEOVERTEXTURE});
+
          function handleComplete() {
             console.log("Assets loaded.");
             //create webgl hook + pixi stage
             initialiseRenderer();
             startLevel();
-             /*createjs.Sound.play("sound");
-             var image = queue.getResult("myImage");
-             document.body.appendChild(image);*/
          }
     }
 
@@ -78,8 +79,13 @@
     }
 
     function initialiseSprites() {
+        //delete existing sprites
+        while(stage.children.length > 0){ 
+            var child = stage.getChildAt(0);
+            stage.removeChild(child);
+        }
+
         // your tilemap container
-        var blueprint = new PIXI.DisplayObjectContainer();
         var size = 16;
         for (var x = 0; x < size; x++) {
             for (var y = 0; y < size; y++) {
@@ -281,7 +287,11 @@
 	
 	function gameOver() {
 		createjs.Sound.play(SOUNDS.SCREWTHIS);
-		startLevel();
+
+        var message = createSprite(GAMEOVERTEXTURE, 0, 0);
+        blueprint.addChild(message);
+
+		setTimeout(startLevel, 5000);
 	}
 
     function loaded() {
@@ -315,7 +325,9 @@
     }
 
     function handleResize() {
-        var dimension = window.innerHeight < window.innerWidth ? window.innerHeight : window.innerWidth;
+        /*var height = window.innerHeight * 0.9;
+        blueprint.scale.x = height * 0.7;
+        blueprint.scale.y = height * 0.7;*/
 
     }
 
