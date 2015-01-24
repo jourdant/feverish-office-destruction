@@ -72,7 +72,7 @@
         stage = new PIXI.Stage(0x6699FF);
 
         //create a renderer instance
-        renderer = PIXI.autoDetectRenderer(768, 768);
+        renderer = PIXI.autoDetectRenderer(1, 1);
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
 
         //add the renderer view element to the DOM
@@ -120,8 +120,8 @@
 		var sprite = createSprite(STAIRSTECTURE, (Map.WIDTH - 1) * 128, (Map.HEIGHT - 1) * 128);
 		blueprint.addChild(sprite);
 
-        blueprint.scale.x = PAGESCALE;
-        blueprint.scale.y = PAGESCALE;
+        blueprint.scale.x = .7*window.innerHeight / 4 / 512;
+        blueprint.scale.y = .7*window.innerHeight / 4 / 512;
         stage.addChild(blueprint);
 
         //render base map
@@ -337,17 +337,18 @@
     }
 
     function handleResize() {
-        /*var height = window.innerHeight * 0.9;
-        blueprint.scale.x = height * 0.7;
-        blueprint.scale.y = height * 0.7;
+        var height = window.innerHeight;
+        blueprint.scale.x = .7*height / 4 / 512;
+        blueprint.scale.y = .7*height / 4 / 512;
 
         var container = document.getElementById("game_container");
         container.offsetWidth = container.offsetHeight;
+		
+		var border = document.getElementById("game_border");
+		
+		var canvas = container.children[0];
 
-        var border = document.getElementById("game_border");
-        border.offsetWidth = border.offsetHeight;*/
-
-        //renderer.resize(border.offsetHeight, border.offsetHeight);
+        renderer.resize(height * .7, height * .7);
     }
 
 
