@@ -19,13 +19,13 @@
         renderer = PIXI.autoDetectRenderer(2048, 2048);
 
         //add the renderer view element to the DOM
-        document.body.appendChild(renderer.view);
+        document.getElementById("game_container").appendChild(renderer.view);
 
         //set up the sprite container
         sprites = new PIXI.DisplayObjectContainer();
 
         //hook up render event to browser
-        requestAnimFrame(render);
+        //requestAnimFrame(render);
     }
 
     function initialiseSprites() {
@@ -52,6 +52,9 @@
         sprites.scale.x = 0.5;
         sprites.scale.y = 0.5;
         stage.addChild(sprites);
+
+        //render base map
+        requestAnimFrame(render);
     }
 
     function Sprite (sprite_url, x, y) {
@@ -71,7 +74,7 @@
     //
     function render() {
         renderer.render(stage); 
-        requestAnimFrame(render);
+        //requestAnimFrame(render);
     }
 
     function handleInput(event) {
