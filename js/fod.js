@@ -39,7 +39,13 @@
             //create webgl hook + pixi stage
             initialiseRenderer();
             //size window and set scale
+
+            //initialise sound
+            initialiseSound();
+
             handleResize();
+
+            createjs.Sound.play(SOUNDS.OKWHATSHOULDIDONOW);
             startLevel();
          }
     }
@@ -56,6 +62,7 @@
         SOUNDS.SCREWTHIS = "SCREWTHIS";
 		SOUNDS.IVEREACHEDTHESTAIRS= "IVEREACHEDTHESTAIRS";
 		SOUNDS.OHNOMORESTAIRS= "OHNOMORESTAIRS";
+        SOUNDS.MUSIC= "MUSIC";
 
         createjs.Sound.registerSound("sounds/processed/help.mp3", SOUNDS.HELP);
         createjs.Sound.registerSound("sounds/processed/thatsanicefire.mp3", SOUNDS.THATSANICEFIRE);
@@ -68,6 +75,7 @@
         createjs.Sound.registerSound("sounds/processed/screwthisimjustgonnataketheelevator.mp3", SOUNDS.SCREWTHIS);
 		createjs.Sound.registerSound("sounds/processed/ivereachedthestairs.mp3", SOUNDS.IVEREACHEDTHESTAIRS);
 		createjs.Sound.registerSound("sounds/processed/ohnomorestairs.mp3", SOUNDS.OHNOMORESTAIRS);
+        createjs.Sound.registerSound("sounds/processed/elevatormusicloop.mp3", SOUNDS.MUSIC);
     }
 
     function initialiseRenderer() {
@@ -316,9 +324,6 @@
     function loaded() {
         //preload assets
         initialiseAssets();
-
-        //initialise sound
-        initialiseSound();
     }
 	
 	function startLevel() {
@@ -350,7 +355,6 @@
         container.offsetWidth = container.offsetHeight;
 		
 		var border = document.getElementById("game_border");
-		
 		var canvas = container.children[0];
 
         renderer.resize(height * .7, height * .7);
@@ -364,12 +368,12 @@
 
             var seconds = Math.abs(diff / 1000);
             var sound = null;
-            if (seconds > 10 && lastkeyurgency == 3) { sound = SOUNDS.QUICKINEEDTOGOSOMEWHERE; lastkeyurgency++;}
-            else if (seconds > 6 && lastkeyurgency == 1) { sound = SOUNDS.OKWHATSHOULDIDONOW; lastkeyurgency++;}
-            else if (seconds > 3 && lastkeyurgency == 0) { sound = SOUNDS.OUCHTHATSHOT; lastkeyurgency++;}
+            if (seconds > 14 && lastkeyurgency == 2) { sound = SOUNDS.HELP; lastkeyurgency++;}
+            else if (seconds > 9 && lastkeyurgency == 1) { sound = SOUNDS.QUICKINEEDTOGOSOMEWHERE; lastkeyurgency++;}
+            else if (seconds > 3 && lastkeyurgency == 0) { sound = SOUNDS.OKWHATSHOULDIDONOW; lastkeyurgency++;}
 
             if (sound) { createjs.Sound.play(sound); }
-        } 
+        }
     }
 
     function keydown(event) {
