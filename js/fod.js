@@ -9,6 +9,7 @@
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
+    var BLUEPRINTTEXTURE = "./img/sprites/blueprint-tile.png";
 	var WALLTEXTURE = "./img/sprites/wall.png";
 	var DOORTEXTURE = "./img/sprites/door.png";
 	var STAIRSTECTURE = "./img/sprites/stairs.png";
@@ -16,6 +17,21 @@
     //
     // INITIALISERS
     //
+    function initialiseAssets() {
+         var queue = new createjs.LoadQueue();
+         queue.on("complete", handleComplete, this);
+         queue.loadFile({id:"blueprinttexture", src: BLUEPRINTTEXTURE});
+         queue.loadFile({id:"walltexture", src: WALLTEXTURE});
+         queue.loadFile({id:"doortexture", src: DOORTEXTURE});
+         
+         function handleComplete() {
+            console.log("Assets loaded.");
+             /*createjs.Sound.play("sound");
+             var image = queue.getResult("myImage");
+             document.body.appendChild(image);*/
+         }
+    }
+
     function initialiseRenderer() {
         //create an new instance of a pixi stage
         stage = new PIXI.Stage(0x6699FF);
@@ -40,7 +56,7 @@
         var size = 16;
         for (var x = 0; x < size; x++) {
             for (var y = 0; y < size; y++) {
-                var sprite = createSprite("./img/sprites/blueprint-tile.png", x*128, y*128);
+                var sprite = createSprite(BLUEPRINTTEXTURE, x*128, y*128);
                 blueprint.addChild(sprite)
             }
         }
@@ -215,6 +231,10 @@
 	}
 
     function loaded() {
+        //preload assets
+        initialiseAssets();
+
+        //generate map
 		Map.generateMap();
 		
         //create webgl hook + pixi stage
