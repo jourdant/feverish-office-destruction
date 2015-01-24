@@ -7,3 +7,8 @@ body {
 	overflow: hidden;
 	
 }
+
+#game_container {
+	height: 90%;
+	background-color: yellow;
+}

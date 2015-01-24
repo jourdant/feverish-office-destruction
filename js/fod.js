@@ -5,8 +5,9 @@
     //
     var stage = null;
     var renderer = null;
-    var sprites = new Array();
-   
+    var sprites = null;
+
+
     //
     // INITIALISERS
     //
@@ -15,19 +16,42 @@
         stage = new PIXI.Stage(0x6699FF);
 
         //create a renderer instance
-        renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
+        renderer = PIXI.autoDetectRenderer(2048, 2048);
 
         //add the renderer view element to the DOM
         document.body.appendChild(renderer.view);
+
+        //set up the sprite container
+        sprites = new PIXI.DisplayObjectContainer();
 
         //hook up render event to browser
         requestAnimFrame(render);
     }
 
     function initialiseSprites() {
-        var bunny = Sprite("./img/sprites/bunny.png", window.innerWidth/2, window.innerHeight/2);
-        sprites[sprites.length] = bunny;
-        stage.addChild(bunny);
+        // your tilemap container
+        var blueprint = new PIXI.DisplayObjectContainer();
+        var size = 16;
+        for (var x = 0; x < size; x++) {
+            for (var y = 0; y < size; y++) {
+                var sprite = Sprite("./img/sprites/blueprint-tile.png", x*128, y*128);
+                stage.addChild(sprite)
+            }
+        }
+
+        //add code here for adding walls to map. ie, 
+        //foreach (var wall in walls)
+        //    var s = Sprite("./img/sprites/wall.png");
+        //    stage.addChild(s);
+
+        var texture = new PIXI.RenderTexture(2048, 2048);
+        texture.render(blueprint);
+        var background = new PIXI.Sprite(texture);
+        stage.addChild(background);
+
+        sprites.scale.x = 0.5;
+        sprites.scale.y = 0.5;
+        stage.addChild(sprites);
     }
 
     function Sprite (sprite_url, x, y) {
@@ -35,6 +59,8 @@
         var sprite = new PIXI.Sprite(texture);
         sprite.position.x = x;
         sprite.position.y = y;
+        sprite.scale.x = 0.25;
+        sprite.scale.y = 0.25;
         return sprite;
     }
 
@@ -43,16 +69,9 @@
     //
     // EVENT HANDLERS
     //
-    function loaded() {
-        //create webgl hook + pixi stage
-        initialiseRenderer();
-
-        //create sprites
-        initialiseSprites();
-    }
-
-    function unloading() {
-        //cleanup
+    function render() {
+        renderer.render(stage); 
+        requestAnimFrame(render);
     }
 
     function handleInput(event) {
@@ -75,17 +94,18 @@
         }
     }
 
-    function render() {
-        var changed = false;
+    function loaded() {
+        //create webgl hook + pixi stage
+        initialiseRenderer();
 
-        //if (Math.floor((Math.random() * 100) + 1) > 75) {
-            stage.getChildAt(0).rotation += 0.1;
-            changed = true;
-        //}
-
-        if (changed == true) { renderer.render(stage); }
-        requestAnimFrame(render);
+        //create sprites
+        initialiseSprites();
     }
+
+    function unloading() {
+        //cleanup
+    }
+
 
 
     //hook up DOM events
