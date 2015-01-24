@@ -4,6 +4,13 @@ html {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  height: 100%;
+}
+
+* {
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
 }
 
 body {
@@ -11,35 +18,33 @@ body {
 	padding: 0;
 	height: 100%;
 	width: 100%;
-	background-color: #000000;
-	overflow: hidden;
-	
 }
 
 #game_border {
-  background: url("../img/border.png") no-repeat center center fixed; 
-  height: 1102px;
-  width: 1102px;
-  position: absolute;
-  top:0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
+  background: url("../img/border.png") no-repeat center center;
+  background-size: contain;
+  height: 100%;
+  width: auto;
   margin: auto;
-  overflow: hidden;
 }
 
 #game_container {
-  height: 768px;
-  width: 768px;
+	padding-top: 15%;
 
-  position: absolute;
+  /* position: absolute; */
   top:0;
   bottom: 0;
   left: 0;
   right: 0;
 
-  margin: auto;
   overflow: hidden;
+}
+
+#game_container canvas {
+	position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
 }

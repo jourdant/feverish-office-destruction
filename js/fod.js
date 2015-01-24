@@ -7,6 +7,7 @@
     var renderer = null;
     var blueprint = new PIXI.DisplayObjectContainer();
 	var playerposition = {x:0, y:0};
+	var winnumber = 0;
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
@@ -50,6 +51,8 @@
         SOUNDS.QUICKINEEDTOGOSOMEWHERE = "QUICKINEEDTOGOSOMEWHERE";
         SOUNDS.QUICKWHATSHOULDIDONOW = "QUICKWHATSHOULDIDONOW";
         SOUNDS.SCREWTHIS = "SCREWTHIS";
+		SOUNDS.IVEREACHEDTHESTAIRS= "IVEREACHEDTHESTAIRS";
+		SOUNDS.OHNOMORESTAIRS= "OHNOMORESTAIRS";
 
         createjs.Sound.registerSound("sounds/processed/help.mp3", SOUNDS.HELP);
         createjs.Sound.registerSound("sounds/processed/thatsanicefire.mp3", SOUNDS.THATSANICEFIRE);
@@ -60,6 +63,8 @@
         createjs.Sound.registerSound("sounds/processed/quickineedtogosomewhere.mp3", SOUNDS.QUICKINEEDTOGOSOMEWHERE);
         createjs.Sound.registerSound("sounds/processed/quickwhatshouldidonow.mp3", SOUNDS.QUICKWHATSHOULDIDONOW);
         createjs.Sound.registerSound("sounds/processed/screwthisimjustgonnataketheelevator.mp3", SOUNDS.SCREWTHIS);
+		createjs.Sound.registerSound("sounds/processed/ivereachedthestairs.mp3", SOUNDS.IVEREACHEDTHESTAIRS);
+		createjs.Sound.registerSound("sounds/processed/ohnomorestairs.mp3", SOUNDS.OHNOMORESTAIRS);
     }
 
     function initialiseRenderer() {
@@ -67,7 +72,7 @@
         stage = new PIXI.Stage(0x6699FF);
 
         //create a renderer instance
-        renderer = PIXI.autoDetectRenderer(768, 768);
+        renderer = PIXI.autoDetectRenderer(1, 1);
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
 
         //add the renderer view element to the DOM
@@ -115,8 +120,8 @@
 		var sprite = createSprite(STAIRSTECTURE, (Map.WIDTH - 1) * 128, (Map.HEIGHT - 1) * 128);
 		blueprint.addChild(sprite);
 
-        blueprint.scale.x = PAGESCALE;
-        blueprint.scale.y = PAGESCALE;
+        blueprint.scale.x = .7*window.innerHeight / 4 / 512;
+        blueprint.scale.y = .7*window.innerHeight / 4 / 512;
         stage.addChild(blueprint);
 
         //render base map
@@ -218,7 +223,13 @@
     }
 	
 	function win() {
-		alert("Win!");
+		if(winnumber > 0) {
+			createjs.Sound.play(SOUNDS.OHNOMORESTAIRS);
+		}
+		else {	
+			createjs.Sound.play(SOUNDS.IVEREACHEDTHESTAIRS);
+		}
+		winnumber++;
 		startLevel();
 	}
 	
@@ -243,7 +254,7 @@
 	}
 	
 	function cat() {
-		alert("OH GOT THE CAAAAATS");
+		alert("OH NO THE CAAAAATS");
 	}
 	
 	function checkNewSpace(newSpace) {
@@ -270,8 +281,8 @@
 	function checkForDeath() {
 		var here = Map.spaces[playerposition.x][playerposition.y];
 		var north = playerposition.y > 0 ? Map.spaces[playerposition.x][playerposition.y - 1] : null;
-		var east = playerposition.x < Map.WIDTH ? Map.spaces[playerposition.x + 1][playerposition.y] : null;
-		var south = playerposition.y < Map.HEIGHT ? Map.spaces[playerposition.x][playerposition.y + 1] : null;
+		var east = playerposition.x + 1 < Map.WIDTH ? Map.spaces[playerposition.x + 1][playerposition.y] : null;
+		var south = playerposition.y + 1 < Map.HEIGHT ? Map.spaces[playerposition.x][playerposition.y + 1] : null;
 		var west = playerposition.x > 0 ? Map.spaces[playerposition.x - 1][playerposition.y] : null;
 		
 		if((!north || (north.down && !north.down.door) || isObstructed(north))
@@ -318,7 +329,7 @@
 		
 		Fire.begin();
 		
-		deathTicker = setInterval(checkForDeath, 100);
+		deathTicker = setInterval(checkForDeath, 1000);
 	}
 
     function unloading() {
@@ -326,17 +337,18 @@
     }
 
     function handleResize() {
-        /*var height = window.innerHeight * 0.9;
-        blueprint.scale.x = height * 0.7;
-        blueprint.scale.y = height * 0.7;
+        var height = window.innerHeight;
+        blueprint.scale.x = .7*height / 4 / 512;
+        blueprint.scale.y = .7*height / 4 / 512;
 
         var container = document.getElementById("game_container");
         container.offsetWidth = container.offsetHeight;
+		
+		var border = document.getElementById("game_border");
+		
+		var canvas = container.children[0];
 
-        var border = document.getElementById("game_border");
-        border.offsetWidth = border.offsetHeight;*/
-
-        //renderer.resize(border.offsetHeight, border.offsetHeight);
+        renderer.resize(height * .7, height * .7);
     }
 
 
