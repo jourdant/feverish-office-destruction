@@ -8,6 +8,7 @@
     var blueprint = new PIXI.DisplayObjectContainer();
 	var playerposition = {x:0, y:0};
 	var winnumber = 0;
+    var keystate = new Array();
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
@@ -351,11 +352,26 @@
         renderer.resize(height * .7, height * .7);
     }
 
+    
+    function keydown(event) {
+        if (event.keyCode >= 37 && event.keyCode <= 40) {
+            if (keystate[event.keyCode] == false) {
+                keystate[event.keyCode] = true;
+                handleInput(event);
+            }
+        }
+    }
 
+    function keyup(event) {
+        if (event.keyCode >= 37 && event.keyCode <= 40) {
+            keystate[event.keyCode] = false;
+        }
+    }
 
     //hook up DOM events
     document.addEventListener("DOMContentLoaded", loaded, false);
     document.addEventListener("beforeunload", unloading, false);
-    window.addEventListener("keydown", handleInput, false);
+    window.addEventListener("keydown", keydown, false);
+    window.addEventListener("keyup", keyup, false);
     window.addEventListener("resize", handleResize, false);
 })(this, document);
