@@ -5,9 +5,8 @@
     //
     var stage = null;
     var renderer = null;
-    var sprites = null;
 	
-	var SCALEFACTOR = 0.25;
+	var SCALEFACTOR = 0.375;
 
 
     //
@@ -18,7 +17,8 @@
         stage = new PIXI.Stage(0x6699FF);
 
         //create a renderer instance
-        renderer = PIXI.autoDetectRenderer(2048, 2048);
+        renderer = PIXI.autoDetectRenderer(768, 768);
+        PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
 
         //add the renderer view element to the DOM
         document.getElementById("game_container").appendChild(renderer.view);
@@ -37,35 +37,30 @@
         for (var x = 0; x < size; x++) {
             for (var y = 0; y < size; y++) {
                 var sprite = Sprite("./img/sprites/blueprint-tile.png", x*128, y*128);
-                stage.addChild(sprite)
+                blueprint.addChild(sprite)
             }
         }
 
-        //add code here for adding walls to map. ie, 
-        //foreach (var wall in walls)
-        //    var s = Sprite("./img/sprites/wall.png");
-        //    stage.addChild(s);
+        //add code here for adding walls to map
         for (var x = 0; x < Map.spaces.length; x++) {
             for (var y = 0; y < Map.spaces[0].length; y++) {
 				if(Map.spaces[y][x].right) {
-					stage.addChild(Sprite("./img/sprites/wall.png", (x + 1)*128 - (70 * SCALEFACTOR) / 2, y*128));
+					blueprint.addChild(Sprite("./img/sprites/wall.png", (x + 1)*128 - (70 * SCALEFACTOR) / 2, y*128));
 				}
 				if(Map.spaces[y][x].right) {
 					var sprite = Sprite("./img/sprites/wall.png", (x + 1)*128, y*128 + (70 * SCALEFACTOR) / 2);
 					sprite.rotation = -90 * Math.PI / 180;
-					stage.addChild(sprite);
+					blueprint.addChild(sprite);
 				}
 			}
 		}
 
-        var texture = new PIXI.RenderTexture(2048, 2048);
-        texture.render(blueprint);
-        var background = new PIXI.Sprite(texture);
-        stage.addChild(background);
-
-        sprites.scale.x = 0.5;
-        sprites.scale.y = 0.5;
-        stage.addChild(sprites);
+        //var texture = new PIXI.RenderTexture();
+        //texture.render(blueprint);
+        //var background = new PIXI.Sprite(texture);
+        blueprint.scale.x = SCALEFACTOR;
+        blueprint.scale.y = SCALEFACTOR;
+        stage.addChild(blueprint);
 
         //render base map
         requestAnimFrame(render);
@@ -88,7 +83,7 @@
     //
     function render() {
         renderer.render(stage); 
-        //requestAnimFrame(render);
+        requestAnimFrame(render);
     }
 
     function handleInput(event) {
