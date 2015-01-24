@@ -47,11 +47,11 @@
         //    stage.addChild(s);
         for (var x = 0; x < Map.spaces.length; x++) {
             for (var y = 0; y < Map.spaces[0].length; y++) {
-				if(Map.spaces[y][x].right) {
+				if(Map.spaces[x][y].right) {
 					stage.addChild(Sprite("./img/sprites/wall.png", (x + 1)*128 - (70 * SCALEFACTOR) / 2, y*128));
 				}
-				if(Map.spaces[y][x].right) {
-					var sprite = Sprite("./img/sprites/wall.png", (x + 1)*128, y*128 + (70 * SCALEFACTOR) / 2);
+				if(Map.spaces[x][y].down) {
+					var sprite = Sprite("./img/sprites/wall.png", x*128, (y + 1)*128);// + (70 * SCALEFACTOR) / 2);
 					sprite.rotation = -90 * Math.PI / 180;
 					stage.addChild(sprite);
 				}
