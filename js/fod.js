@@ -45,8 +45,11 @@
 
             handleResize();
 
-            createjs.Sound.play(SOUNDS.OKWHATSHOULDIDONOW);
             startLevel();
+			setTimeout(function(){
+				createjs.Sound.play(SOUNDS.MUSIC);
+				}, 100)
+            
          }
     }
 
@@ -66,6 +69,11 @@
         SOUNDS.HELLO = "HELLO";
         SOUNDS.AREYOUTHERE ="AREYOUTHERE";
 
+		createjs.Sound.on("fileload", function(event) {
+			if(event.id == SOUNDS.MUSIC) {
+				createjs.Sound.play(SOUNDS.MUSIC);
+			}
+		})
         createjs.Sound.registerSound("sounds/processed/help.mp3", SOUNDS.HELP);
         createjs.Sound.registerSound("sounds/processed/thatsanicefire.mp3", SOUNDS.THATSANICEFIRE);
         createjs.Sound.registerSound("sounds/processed/icantgothatway.mp3", SOUNDS.ICANTGOTHATWAY);
@@ -386,7 +394,7 @@
 
     function keydown(event) {
         if (event.keyCode >= 37 && event.keyCode <= 40) {
-            if (keystate[event.keyCode] == false) {
+            if (!keystate[event.keyCode]) {
                 keystate[event.keyCode] = true;
                 handleInput(event);
                 lastkey = new Date();
