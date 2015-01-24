@@ -250,6 +250,31 @@
 		currentSpace.player = false;
 		newSpace.player = true;
 	}
+	
+	function checkForDeath() {
+		var here = Map.spaces[playerposition.x][playerposition.y];
+		var north = playerposition.y > 0 ? Map.spaces[playerposition.x][playerposition.y - 1] : null;
+		var east = playerposition.x < Map.WIDTH ? Map.spaces[playerposition.x + 1][playerposition.y] : null;
+		var south = playerposition.y < Map.HEIGHT ? Map.spaces[playerposition.x][playerposition.y + 1] : null;
+		var west = playerposition.x > 0 ? Map.spaces[playerposition.x - 1][playerposition.y] : null;
+		
+		if((!north || (north.down && !north.down.door) || isObstructed(north))
+			&& (!east || (here.right && !here.right.door) || isObstructed(east))
+			&& (!south || (here.down && !here.down.door) || isObstructed(south))
+			&& (!west || (west.right && !west.right.door) || isObstructed(west))) {
+			clearInterval(deathTicker);
+			gameOver();
+		}
+	}
+	
+	function isObstructed(place) {
+		return place.player || place.fire || place.object;
+	}
+	
+	function gameOver() {
+		createjs.Sound.play(SOUNDS.SCREWTHIS);
+		startLevel();
+	}
 
     function loaded() {
         //preload assets
@@ -275,6 +300,8 @@
         initialiseSprites();
 		
 		Fire.begin();
+		
+		deathTicker = setInterval(checkForDeath, 100);
 	}
 
     function unloading() {
