@@ -8,6 +8,8 @@
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
+	var WALLTEXTURE = "./img/sprites/wall.png";
+	var DOORTEXTURE = "./img/sprites/door.png"
 
     //
     // INITIALISERS
@@ -36,7 +38,7 @@
         var size = 16;
         for (var x = 0; x < size; x++) {
             for (var y = 0; y < size; y++) {
-                var sprite = Sprite("./img/sprites/blueprint-tile.png", x*128, y*128);
+                var sprite = createSprite("./img/sprites/blueprint-tile.png", x*128, y*128);
                 blueprint.addChild(sprite)
             }
         }
@@ -45,10 +47,12 @@
         for (var x = 0; x < Map.spaces.length; x++) {
             for (var y = 0; y < Map.spaces[0].length; y++) {
 				if(Map.spaces[x][y].right) {
-					blueprint.addChild(Sprite("./img/sprites/wall.png", (x + 1)*128 - (70 * SCALEFACTOR) / 2, y*128));
+					var texture = Map.spaces[x][y].right.door ? DOORTEXTURE : WALLTEXTURE;
+					blueprint.addChild(createSprite(texture, (x + 1)*128 - (70 * SCALEFACTOR) / 2, y*128));
 				}
 				if(Map.spaces[x][y].down) {
-					var sprite = Sprite("./img/sprites/wall.png", x*128, (y + 1)*128 + (70 * SCALEFACTOR) / 2);
+					var texture = Map.spaces[x][y].down.door ? DOORTEXTURE : WALLTEXTURE;
+					var sprite = createSprite(texture, x*128, (y + 1)*128 + (70 * SCALEFACTOR) / 2);
 					sprite.rotation = -90 * Math.PI / 180;
 					blueprint.addChild(sprite);
 				}
@@ -63,7 +67,7 @@
         requestAnimFrame(render);
     }
 
-    function Sprite (sprite_url, x, y) {
+    function createSprite (sprite_url, x, y) {
         var texture = PIXI.Texture.fromImage(sprite_url);
         var sprite = new PIXI.Sprite(texture);
         sprite.position.x = x;

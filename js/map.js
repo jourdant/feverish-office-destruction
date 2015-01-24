@@ -1,8 +1,8 @@
 (function() {
 	var WIDTH = 16;
 	var HEIGHT = 16;
-	var MAX_ROOMSIZE = 7;
-	var MIN_ROOMSIZE = 3;
+	var MAX_ROOMSIZE = 14;
+	var MIN_ROOMSIZE = 10;
 	
 	Map = {};
 	Map.spaces = [];
@@ -107,10 +107,10 @@
 			for(var k = 0; k < HEIGHT; k++) {
 				Map.spaces[j][k] = {};
 				if(j + 1 < WIDTH && rooms[j+1][k] != rooms[j][k]) {
-					Map.spaces[j][k].right = true;
+					Map.spaces[j][k].right = {door: Math.random() > 0.65};
 				}
 				if(k + 1 < HEIGHT && rooms[j][k+1] != rooms[j][k]) {
-					Map.spaces[j][k].down = true;
+					Map.spaces[j][k].down = {door: Math.random() > 0.65};
 				}
 			}
 		}
