@@ -4,6 +4,8 @@
 	Map.HEIGHT = 16;
 	var MAX_ROOMSIZE = 20;
 	var MIN_ROOMSIZE = 16;
+	var DOOR_PROBABILITY = 0.65;
+	//var DOOR_PROBABILITY = 1;
 	
 	Direction = {};
 	Direction.RIGHT = 0;
@@ -13,76 +15,78 @@
 	
 	Map.spaces = [];
 	Map.generateMap = function() {
-		for(var i = 0; i < Map.WIDTH; i++) {
-			Map.spaces[i] = [];
-			for(var j = 0; j < Map.HEIGHT; j++) {
-				Map.spaces[i][j] = {};
+		do {
+			for(var i = 0; i < Map.WIDTH; i++) {
+				Map.spaces[i] = [];
+				for(var j = 0; j < Map.HEIGHT; j++) {
+					Map.spaces[i][j] = {};
+				}
 			}
-		}
-		
-		var rooms = [];
-		
-		for(var i = 0; i < Map.WIDTH; i++) {
-			rooms[i] = [];
-		}
-		
-		var squaresCounter = 0;
-		var roomsize = 0;
-		var roomcounter = 0;
-		var roomnumber = 0;
-		while(squaresCounter < Map.WIDTH * Map.HEIGHT) {
-			roomsize = generateRoomSize();
-			roomnumber++;
 			
-			var location = findEmptyLocation(rooms);
-			rooms[location.x][location.y] = roomnumber;
-			roomcounter++;
+			var rooms = [];
 			
-			while(roomcounter < roomsize) {
-				var direction = Math.floor(Math.random() * 4);
-				var found = false;
+			for(var i = 0; i < Map.WIDTH; i++) {
+				rooms[i] = [];
+			}
+			
+			var squaresCounter = 0;
+			var roomsize = 0;
+			var roomcounter = 0;
+			var roomnumber = 0;
+			while(squaresCounter < Map.WIDTH * Map.HEIGHT) {
+				roomsize = generateRoomSize();
+				roomnumber++;
 				
-				for(var i = 0; i < 4; i++) {
-					var newLocation = {
-						x : location.x,
-						y : location.y
-					}
+				var location = findEmptyLocation(rooms);
+				rooms[location.x][location.y] = roomnumber;
+				roomcounter++;
+				
+				while(roomcounter < roomsize) {
+					var direction = Math.floor(Math.random() * 4);
+					var found = false;
 					
-					if(direction == Direction.RIGHT) {
-						newLocation.x++;
-					} else if (direction == Direction.DOWN){
-						newLocation.y++;
-					} else if (direction == Direction.LEFT){
-						newLocation.x--;
-					} else if (direction == Direction.UP){
-						newLocation.y--;
+					for(var i = 0; i < 4; i++) {
+						var newLocation = {
+							x : location.x,
+							y : location.y
+						}
+						
+						if(direction == Direction.RIGHT) {
+							newLocation.x++;
+						} else if (direction == Direction.DOWN){
+							newLocation.y++;
+						} else if (direction == Direction.LEFT){
+							newLocation.x--;
+						} else if (direction == Direction.UP){
+							newLocation.y--;
+						}
+						
+						if(newLocation.x < Map.WIDTH 
+							&& newLocation.x >= 0 
+							&& newLocation.y < Map.HEIGHT 
+							&& newLocation.y >= 0
+							&& !rooms[newLocation.x][newLocation.y]) {
+							location = newLocation;
+							found = true;
+							break;
+						}
+						direction = (direction + 1) % 4
 					}
-					
-					if(newLocation.x < Map.WIDTH 
-						&& newLocation.x >= 0 
-						&& newLocation.y < Map.HEIGHT 
-						&& newLocation.y >= 0
-						&& !rooms[newLocation.x][newLocation.y]) {
-						location = newLocation;
-						found = true;
+					if(found) {
+						rooms[location.x][location.y] = roomnumber;
+						roomcounter++;
+					} else {
 						break;
 					}
-					direction = (direction + 1) % 4
 				}
-				if(found) {
-					rooms[location.x][location.y] = roomnumber;
-					roomcounter++;
-				} else {
-					break;
-				}
+				squaresCounter += roomcounter;
+				roomcounter = 0;
 			}
-			squaresCounter += roomcounter;
-			roomcounter = 0;
-		}
-		log2dArray(rooms)
-		constructWalls(rooms);
-		
-		Map.spaces[0][0].player = true;
+			log2dArray(rooms)
+			constructWalls(rooms);
+			
+			Map.spaces[0][0].player = true;
+		} while(!checkPossibleToComplete({x:0,y:0})[Map.WIDTH - 1][Map.HEIGHT - 1])
 	}
 	
 	function findEmptyLocation(rooms) {
@@ -118,10 +122,10 @@
 		for(var j = 0; j < Map.WIDTH; j++) {
 			for(var k = 0; k < Map.HEIGHT; k++) {
 				if(j + 1 < Map.WIDTH && rooms[j+1][k] != rooms[j][k]) {
-					Map.spaces[j][k].right = {door: Math.random() > 0.65};
+					Map.spaces[j][k].right = {door: Math.random() > DOOR_PROBABILITY};
 				}
 				if(k + 1 < Map.HEIGHT && rooms[j][k+1] != rooms[j][k]) {
-					Map.spaces[j][k].down = {door: Math.random() > 0.65};
+					Map.spaces[j][k].down = {door: Math.random() > DOOR_PROBABILITY};
 				}
 			}
 		}
@@ -129,5 +133,43 @@
 	
 	function generateRoomSize() {
 		return Math.floor(Math.random() * (MAX_ROOMSIZE - MIN_ROOMSIZE)) + MIN_ROOMSIZE;
+	}
+	
+	function isWallBetween(room1, room2) {
+		var space1 = Map.spaces[room1.x][room1.y];
+		var space2 = Map.spaces[room2.x][room2.y]
+		if(room2.x == room1.x + 1) {//right
+			return space1.right && !space1.right.door;
+		} else if (room2.y == room1.y + 1) {//down
+			return space1.down && !space1.down.door;
+		} else if (room2.x == room1.x - 1) {//left
+			return space2.right && !space2.right.door;
+		} else { //up
+			return space2.down && !space2.down.door;
+		}
+	}
+	
+	function checkPossibleToComplete (point, checkedRooms) {
+		if(!checkedRooms) {
+			checkedRooms = [];
+			for(var i = 0; i < Map.WIDTH; i++) {
+				checkedRooms.push([]);
+			}
+		}
+		checkedRooms[point.x][point.y] = true;
+		var up = {x:point.x, y:point.y - 1}
+		var down = {x:point.x, y:point.y + 1}
+		var left = {x:point.x - 1, y:point.y}
+		var right = {x:point.x + 1, y:point.y}
+		if(up.y >= 0 && !checkedRooms[up.x][up.y] && !isWallBetween(point, up))
+			checkPossibleToComplete(up, checkedRooms);
+		if(down.y < Map.HEIGHT && !checkedRooms[down.x][down.y] && !isWallBetween(point, down))
+			checkPossibleToComplete(down, checkedRooms);
+		if(right.x < Map.WIDTH && !checkedRooms[right.x][right.y] && !isWallBetween(point, right))
+			checkPossibleToComplete(right, checkedRooms);
+		if(left.x >= 0 && !checkedRooms[left.x][left.y] && !isWallBetween(point, left))
+			checkPossibleToComplete(left, checkedRooms);
+		
+		return checkedRooms;
 	}
 })()
