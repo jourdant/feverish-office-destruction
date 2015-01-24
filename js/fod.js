@@ -12,6 +12,7 @@
     var lastkey = null;
     var lastkeyurgency = 0;
     var level = 102;
+	var deathTicker;
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
@@ -338,6 +339,8 @@
 	}
 	
 	function gameOver() {
+		winnumber = 0;
+		level = 102;
         createjs.Sound.stop();
 		createjs.Sound.play(SOUNDS.SCREWTHIS);
 
@@ -372,9 +375,12 @@
         //create sprites
         initialiseSprites();
 		
-		Fire.begin();
+		Fire.begin(1/Math.pow(1.6, winnumber));
 		
         interjectionTicker = setInterval(checkForInterjection, 500);
+		if(deathTicker) {
+			clearInterval(deathTicker);
+		}
 		deathTicker = setInterval(checkForDeath, 1000);
 	}
 
