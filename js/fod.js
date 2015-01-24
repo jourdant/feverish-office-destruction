@@ -21,6 +21,7 @@
     var STAIRSTECTURE = "./img/sprites/stairs.png";
     var GAMEOVERTEXTURE = "./img/sprites/gameover.png";
     var FIRETEXTURE = "./img/sprites/fire.png";
+    var CATTEXTURE = "./img/sprites/cat.png";
 
     var SOUNDS = {};
 
@@ -36,6 +37,7 @@
          queue.loadFile({id:"stairstexture", src: STAIRSTECTURE});
          queue.loadFile({id:"gameovertexture", src: GAMEOVERTEXTURE});
          queue.loadFile({id:"firetexture", src: FIRETEXTURE});
+         queue.loadFile({id:"cattexture", src: CATTEXTURE});
 
          function handleComplete() {
             console.log("Assets loaded.");
@@ -68,6 +70,7 @@
         SOUNDS.MUSIC= "MUSIC";
         SOUNDS.HELLO = "HELLO";
         SOUNDS.AREYOUTHERE ="AREYOUTHERE";
+        SOUNDS.CAT ="CAT";
 
 		createjs.Sound.on("fileload", function(event) {
 			if(event.id == SOUNDS.MUSIC) {
@@ -89,6 +92,7 @@
         createjs.Sound.registerSound("sounds/processed/elevatormusicloop.mp3", SOUNDS.MUSIC);
         createjs.Sound.registerSound("sounds/processed/hello.mp3", SOUNDS.HELLO);
         createjs.Sound.registerSound("sounds/processed/areyouthere.mp3", SOUNDS.AREYOUTHERE);
+        createjs.Sound.registerSound("sounds/processed/meow.mp3", SOUNDS.CAT);
     }
 
     function initialiseRenderer() {
@@ -281,18 +285,23 @@
 	}
 	
 	function cat() {
-		alert("OH NO THE CAAAAATS");
+		createjs.Sound.play(SOUNDS.CAT);
 	}
 	
 	function checkNewSpace(newSpace, newSpacePosition) {
-		if(newSpace.fire){
+		if(newSpace.fire && !newSpace.fire.seen){
+			newSpace.fire.seen = true;
 			fire();
 			var sprite = createSprite(FIRETEXTURE, newSpacePosition.x*128, newSpacePosition.y*128);
 			blueprint.addChild(sprite);
 			return false;
-		} else if(newSpace.cat){ 
-			return false;
+		} else if(newSpace.cat && !newSpace.cat.seen){ 
+			newSpace.cat.seen = true;
 			cat();
+			var sprite = createSprite(CATTEXTURE, newSpacePosition.x*128, newSpacePosition.y*128);
+			sprite.scale.x = 0.4;
+			sprite.scale.y = 0.4;
+			blueprint.addChild(sprite);
 		} else if(newSpace.object) {
 			iCantGoThatWay();
 			return false;
