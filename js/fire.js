@@ -8,6 +8,7 @@
 	var fireGrowthSpeed = 0.5;
 	Fire.begin = function() {
 		fireLocations = [];
+		Fire.fireLocations = fireLocations
 		var firestartX = Math.floor(Math.random() * Map.WIDTH);
 		var firestartY = Math.floor(Math.random() * Map.HEIGHT);
 		
