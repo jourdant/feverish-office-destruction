@@ -11,7 +11,9 @@
     var PAGESCALE = 0.375;
     var BLUEPRINTTEXTURE = "./img/sprites/blueprint-tile.png";
 	var WALLTEXTURE = "./img/sprites/wall.png";
-	var DOORTEXTURE = "./img/sprites/door.png"
+	var DOORTEXTURE = "./img/sprites/door.png";
+
+    var SOUNDS = {};
 
     //
     // INITIALISERS
@@ -29,6 +31,28 @@
              var image = queue.getResult("myImage");
              document.body.appendChild(image);*/
          }
+    }
+
+    function initialiseSound() {
+        SOUNDS.THATSANICEFIRE = "THATSANICEFIRE";
+        SOUNDS.HELP = "HELP";
+        SOUNDS.ICANTGOTHATWAY = "ICANTGOTHATWAY";
+        SOUNDS.ITBURNS = "ITBURNS";
+        SOUNDS.OKWHATSHOULDIDONOW = "OKWHATSHOULDIDONOW";
+        SOUNDS.OUCHTHATSHOT = "OUCHTHATSHOT";
+        SOUNDS.QUICKINEEDTOGOSOMEWHERE = "QUICKINEEDTOGOSOMEWHERE";
+        SOUNDS.QUICKWHATSHOULDIDONOW = "QUICKWHATSHOULDIDONOW";
+        SOUNDS.SCREWTHIS = "SCREWTHIS";
+
+        createjs.Sound.registerSound("sounds/processed/help.mp3", SOUNDS.HELP);
+        createjs.Sound.registerSound("sounds/processed/thatsanicefire.mp3", SOUNDS.THATSANICEFIRE);
+        createjs.Sound.registerSound("sounds/processed/icantgothatway.mp3", SOUNDS.ICANTGOTHATWAY);
+        createjs.Sound.registerSound("sounds/processed/itburns.mp3", SOUNDS.ITBURNS);
+        createjs.Sound.registerSound("sounds/processed/okwhatshouldidonow.mp3", SOUNDS.OKWHATSHOULDIDONOW);
+        createjs.Sound.registerSound("sounds/processed/ouchthatshot.mp3", SOUNDS.OUCHTHATSHOT);
+        createjs.Sound.registerSound("sounds/processed/quickineedtogosomewhere.mp3", SOUNDS.QUICKINEEDTOGOSOMEWHERE);
+        createjs.Sound.registerSound("sounds/processed/quickwhatshouldidonow.mp3", SOUNDS.QUICKWHATSHOULDIDONOW);
+        createjs.Sound.registerSound("sounds/processed/screwthisimjustgonnataketheelevator.mp3", SOUNDS.SCREWTHIS);
     }
 
     function initialiseRenderer() {
@@ -194,11 +218,11 @@
 	}
 	
 	function iCantGoThatWay() {
-		alert("I can't go that way Dave");
+		createjs.Sound.play(SOUNDS.ICANTGOTHATWAY);
 	}
 	
 	function fire() {
-		alert("that's a pretty fire");
+		createjs.Sound.play(SOUNDS.ITBURNS);
 	}
 	
 	function cat() {
@@ -229,6 +253,9 @@
     function loaded() {
         //preload assets
         initialiseAssets();
+
+        //initialise sound
+        initialiseSound();
 
         //generate map
 		Map.generateMap();
