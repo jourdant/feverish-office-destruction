@@ -11,6 +11,7 @@
     var keystate = new Array();
     var lastkey = null;
     var lastkeyurgency = 0;
+    var level = 102;
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
@@ -109,22 +110,23 @@
     }
 
     function initialiseSprites() {
+        blueprint = new PIXI.DisplayObjectContainer();
         //delete existing sprites
         while(stage.children.length > 0){ 
             var child = stage.getChildAt(0);
             stage.removeChild(child);
         }
 
-        // your tilemap container
+        // tilemap container
         var size = 16;
         for (var x = 0; x < size; x++) {
             for (var y = 0; y < size; y++) {
                 var sprite = createSprite(BLUEPRINTTEXTURE, x*128, y*128);
-                blueprint.addChild(sprite)
+                blueprint.addChild(sprite);
             }
         }
 
-        //add code here for adding walls to map
+        //adding walls to map
         for (var x = 0; x < Map.WIDTH; x++) {
             for (var y = 0; y < Map.HEIGHT; y++) {
 				if(Map.spaces[x][y].right) {
@@ -252,6 +254,7 @@
 		else {	
 			createjs.Sound.play(SOUNDS.IVEREACHEDTHESTAIRS);
 		}
+        level--;
 		winnumber++;
 		startLevel();
 	}
@@ -334,12 +337,20 @@
 		setTimeout(startLevel, 5000);
 	}
 
+    function updateLevelText() {
+        var elem = document.getElementById("level_text");
+        elem.innerText = "Floor: " + level;
+    }
+
+
     function loaded() {
         //preload assets
         initialiseAssets();
     }
 	
 	function startLevel() {
+        updateLevelText();
+
         //generate map
 		Map.generateMap();
 		
