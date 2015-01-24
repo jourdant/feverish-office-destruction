@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/jourdant/feverish-office-destruction/master/art/titletext.png)
+![](https://raw.githubusercontent.com/jourdant/feverish-office-destruction/master/art/title.png)
 ***
 **_A [Global Game Jam 2015](http://globalgamejam.org/) entry by team 'Go Go Piano Attack'_**
 
@@ -8,6 +8,8 @@ Team members:
 * Konny Shin
 * [Jourdan Templeton](http://blog.jourdant.me/)
 
+<br/>
+
 ##Concept
 You are an emergency services operator. Georg(e|ina) calls in desperation as his/her building is on fire!!!
 
@@ -15,6 +17,7 @@ Your mission is to help Georg(e|ina) escape almost certain death. Guide Georg(e|
 
 
 **Good luck.**
+<br/><br/>
 
 ##Controls
 Up, Down, Left, Right
