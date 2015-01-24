@@ -5,6 +5,7 @@
     //
     var stage = null;
     var renderer = null;
+	var playerposition = {x:0, y:0};
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
@@ -94,7 +95,6 @@
     }
 
 
-
     //
     // EVENT HANDLERS
     //
@@ -107,21 +107,124 @@
         switch (event.keyCode) {
             case 37:
                 console.log("left");
+				var newx = playerposition.x - 1;
+				var newy = playerposition.y;
+				if(isOutOfBounds(newx, newy)) {
+					iCantGoThatWay();
+					return;
+				}
+				var currentSpace = Map.spaces[playerposition.x][playerposition.y];
+				var newSpace = Map.spaces[newx][newy]
+				if(newSpace.right && !newSpace.right.door) {
+					iCantGoThatWay();
+				} else if(checkNewSpace(newSpace)) {
+					move(currentSpace, newSpace, newx, newy);
+				}
                 break;
 
             case 38:
                 console.log("up");
+				var newx = playerposition.x;
+				var newy = playerposition.y - 1;
+				if(isOutOfBounds(newx, newy)) {
+					iCantGoThatWay();
+					return;
+				}
+				var currentSpace = Map.spaces[playerposition.x][playerposition.y];
+				var newSpace = Map.spaces[newx][newy]
+				if(newSpace.down && !newSpace.down.door) {
+					iCantGoThatWay();
+				} else if(checkNewSpace(newSpace)) {
+					move(currentSpace, newSpace, newx, newy);
+				}
                 break;
 
             case 39:
                 console.log("right");
+				var newx = playerposition.x + 1;
+				var newy = playerposition.y;
+				if(isOutOfBounds(newx, newy)) {
+					iCantGoThatWay();
+					return;
+				}
+				var currentSpace = Map.spaces[playerposition.x][playerposition.y];
+				var newSpace = Map.spaces[newx][newy]
+				if(currentSpace.right && !currentSpace.right.door) {
+					iCantGoThatWay();
+				} else if(checkNewSpace(newSpace)) {
+					move(currentSpace, newSpace, newx, newy);
+				}
                 break;
 
             case 40:
                 console.log("down");
+				var newx = playerposition.x;
+				var newy = playerposition.y + 1;
+				if(isOutOfBounds(newx, newy)) {
+					iCantGoThatWay();
+					return;
+				}
+				var currentSpace = Map.spaces[playerposition.x][playerposition.y];
+				var newSpace = Map.spaces[newx][newy]
+				if(currentSpace.down && !currentSpace.down.door) {
+					iCantGoThatWay();
+				} else if(checkNewSpace(newSpace)) {
+					move(currentSpace, newSpace, newx, newy);
+				}
                 break;
         }
+		if(playerposition.x == Map.spaces.length - 1 && playerposition.y == Map.spaces[0].length - 1) {
+			win();
+		}
     }
+	
+	function win() {
+		alert("Win!");
+		Map.generateMap();
+		playerposition.x = 0;
+		playerposition.y = 0;
+		initialiseSprites();
+	}
+	
+	function isOutOfBounds(newx, newy) {
+		return newx < 0
+			|| newy < 0
+			|| newx >= Map.spaces.length
+			|| newy >= Map.spaces[0].length
+	}
+	
+	function iCantGoThatWay() {
+		alert("I can't go that way Dave");
+	}
+	
+	function fire() {
+		alert("that's a pretty fire");
+	}
+	
+	function cat() {
+		alert("OH GOT THE CAAAAATS");
+	}
+	
+	function checkNewSpace(newSpace) {
+		if(newSpace.fire){
+			fire();
+			return false;
+		} else if(newSpace.cat){ 
+			return false;
+			cat();
+		} else if(newSpace.object) {
+			iCantGoThatWay();
+			return false;
+		}
+		return true;
+	}
+	
+	function move(currentSpace, newSpace, newx, newy) {
+		playerposition.x = newx;
+		playerposition.y = newy;
+		currentSpace.player = false;
+		newSpace.player = true;
+	}
 
     function loaded() {
         //preload assets
