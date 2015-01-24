@@ -6,6 +6,8 @@
     var stage = null;
     var renderer = null;
     var sprites = null;
+	
+	var SCALEFACTOR = 0.25;
 
 
     //
@@ -43,6 +45,18 @@
         //foreach (var wall in walls)
         //    var s = Sprite("./img/sprites/wall.png");
         //    stage.addChild(s);
+        for (var x = 0; x < Map.spaces.length; x++) {
+            for (var y = 0; y < Map.spaces[0].length; y++) {
+				if(Map.spaces[y][x].right) {
+					stage.addChild(Sprite("./img/sprites/wall.png", (x + 1)*128 - (70 * SCALEFACTOR) / 2, y*128));
+				}
+				if(Map.spaces[y][x].right) {
+					var sprite = Sprite("./img/sprites/wall.png", (x + 1)*128, y*128 + (70 * SCALEFACTOR) / 2);
+					sprite.rotation = -90 * Math.PI / 180;
+					stage.addChild(sprite);
+				}
+			}
+		}
 
         var texture = new PIXI.RenderTexture(2048, 2048);
         texture.render(blueprint);
@@ -59,8 +73,8 @@
         var sprite = new PIXI.Sprite(texture);
         sprite.position.x = x;
         sprite.position.y = y;
-        sprite.scale.x = 0.25;
-        sprite.scale.y = 0.25;
+        sprite.scale.x = SCALEFACTOR;
+        sprite.scale.y = SCALEFACTOR;
         return sprite;
     }
 
@@ -95,6 +109,8 @@
     }
 
     function loaded() {
+		Map.generateMap();
+		
         //create webgl hook + pixi stage
         initialiseRenderer();
 
