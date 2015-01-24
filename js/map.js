@@ -8,6 +8,9 @@
 	Map.spaces = [];
 	for(var i = 0; i < WIDTH; i++) {
 		Map.spaces[i] = [];
+		for(var j = 0; j < HEIGHT; j++) {
+			Map.spaces[i][j] = {};
+		}
 	}
 	Map.generateMap = function() {
 		var rooms = [];
@@ -71,6 +74,8 @@
 		}
 		log2dArray(rooms)
 		constructWalls(rooms);
+		
+		Map.spaces[0][0].player = true;
 	}
 	
 	function findEmptyLocation(rooms) {
@@ -105,7 +110,6 @@
 	function constructWalls(rooms) {
 		for(var j = 0; j < WIDTH; j++) {
 			for(var k = 0; k < HEIGHT; k++) {
-				Map.spaces[j][k] = {};
 				if(j + 1 < WIDTH && rooms[j+1][k] != rooms[j][k]) {
 					Map.spaces[j][k].right = {door: Math.random() > 0.65};
 				}
