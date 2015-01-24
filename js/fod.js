@@ -9,6 +9,8 @@
 	var playerposition = {x:0, y:0};
 	var winnumber = 0;
     var keystate = new Array();
+    var lastkey = null;
+    var lastkeyurgency = 0;
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
@@ -37,7 +39,13 @@
             //create webgl hook + pixi stage
             initialiseRenderer();
             //size window and set scale
+
+            //initialise sound
+            initialiseSound();
+
             handleResize();
+
+            createjs.Sound.play(SOUNDS.OKWHATSHOULDIDONOW);
             startLevel();
          }
     }
@@ -54,6 +62,7 @@
         SOUNDS.SCREWTHIS = "SCREWTHIS";
 		SOUNDS.IVEREACHEDTHESTAIRS= "IVEREACHEDTHESTAIRS";
 		SOUNDS.OHNOMORESTAIRS= "OHNOMORESTAIRS";
+        SOUNDS.MUSIC= "MUSIC";
 
         createjs.Sound.registerSound("sounds/processed/help.mp3", SOUNDS.HELP);
         createjs.Sound.registerSound("sounds/processed/thatsanicefire.mp3", SOUNDS.THATSANICEFIRE);
@@ -66,6 +75,7 @@
         createjs.Sound.registerSound("sounds/processed/screwthisimjustgonnataketheelevator.mp3", SOUNDS.SCREWTHIS);
 		createjs.Sound.registerSound("sounds/processed/ivereachedthestairs.mp3", SOUNDS.IVEREACHEDTHESTAIRS);
 		createjs.Sound.registerSound("sounds/processed/ohnomorestairs.mp3", SOUNDS.OHNOMORESTAIRS);
+        createjs.Sound.registerSound("sounds/processed/elevatormusicloop.mp3", SOUNDS.MUSIC);
     }
 
     function initialiseRenderer() {
@@ -246,10 +256,11 @@
 	}
 	
 	function fire() {
-		if (Fire.fireLocations.length < 100) {
+		if (Fire.fireLocations.length < 50) {
             createjs.Sound.play(SOUNDS.THATSANICEFIRE);
-        }
-        else {
+        } else if(Fire.fireLocations.length < 100) {
+			createjs.Sound.play(SOUNDS.OUCHTHATSHOT);
+        }else {
             createjs.Sound.play(SOUNDS.ITBURNS);
         }
 	}
@@ -290,7 +301,8 @@
 			&& (!east || (here.right && !here.right.door) || isObstructed(east))
 			&& (!south || (here.down && !here.down.door) || isObstructed(south))
 			&& (!west || (west.right && !west.right.door) || isObstructed(west))) {
-			clearInterval(deathTicker);
+			clearInterval(interjectionTicker);
+            clearInterval(deathTicker);
 			gameOver();
 		}
 	}
@@ -313,9 +325,6 @@
     function loaded() {
         //preload assets
         initialiseAssets();
-
-        //initialise sound
-        initialiseSound();
     }
 	
 	function startLevel() {
@@ -330,6 +339,7 @@
 		
 		Fire.begin();
 		
+        interjectionTicker = setInterval(checkForInterjection, 500);
 		deathTicker = setInterval(checkForDeath, 1000);
 	}
 
@@ -346,18 +356,34 @@
         container.offsetWidth = container.offsetHeight;
 		
 		var border = document.getElementById("game_border");
-		
 		var canvas = container.children[0];
 
         renderer.resize(height * .7, height * .7);
     }
 
     
+    function checkForInterjection() {
+        if (lastkey) {
+            var currentTime = new Date();
+            var diff = currentTime.getTime() - lastkey.getTime()
+
+            var seconds = Math.abs(diff / 1000);
+            var sound = null;
+            if (seconds > 14 && lastkeyurgency == 2) { sound = SOUNDS.HELP; lastkeyurgency++;}
+            else if (seconds > 9 && lastkeyurgency == 1) { sound = SOUNDS.QUICKINEEDTOGOSOMEWHERE; lastkeyurgency++;}
+            else if (seconds > 3 && lastkeyurgency == 0) { sound = SOUNDS.OKWHATSHOULDIDONOW; lastkeyurgency++;}
+
+            if (sound) { createjs.Sound.play(sound); }
+        }
+    }
+
     function keydown(event) {
         if (event.keyCode >= 37 && event.keyCode <= 40) {
             if (keystate[event.keyCode] == false) {
                 keystate[event.keyCode] = true;
                 handleInput(event);
+                lastkey = new Date();
+                lastkeyurgency = 0;
             }
         }
     }
