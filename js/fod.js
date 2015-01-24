@@ -46,9 +46,6 @@
             handleResize();
 
             startLevel();
-			setTimeout(function(){
-				createjs.Sound.play(SOUNDS.MUSIC);
-				}, 100)
             
          }
     }
@@ -71,7 +68,8 @@
 
 		createjs.Sound.on("fileload", function(event) {
 			if(event.id == SOUNDS.MUSIC) {
-				createjs.Sound.play(SOUNDS.MUSIC);
+				var instance = createjs.Sound.play(SOUNDS.MUSIC, {loop:-1});
+				instance.volume = 0.5;
 			}
 		})
         createjs.Sound.registerSound("sounds/processed/help.mp3", SOUNDS.HELP);
