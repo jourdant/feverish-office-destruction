@@ -1,8 +1,8 @@
 (function() {
 	var WIDTH = 16;
 	var HEIGHT = 16;
-	var MAX_ROOMSIZE = 14;
-	var MIN_ROOMSIZE = 10;
+	var MAX_ROOMSIZE = 20;
+	var MIN_ROOMSIZE = 16;
 	
 	Map = {};
 	Map.spaces = [];
