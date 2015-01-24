@@ -10,7 +10,8 @@
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
 	var WALLTEXTURE = "./img/sprites/wall.png";
-	var DOORTEXTURE = "./img/sprites/door.png"
+	var DOORTEXTURE = "./img/sprites/door.png";
+	var STAIRSTECTURE = "./img/sprites/stairs.png";
 
     //
     // INITIALISERS
@@ -59,6 +60,9 @@
 				}
 			}
 		}
+		
+		var sprite = createSprite(STAIRSTECTURE, (Map.spaces.length - 1) * 128, (Map.spaces[0].length - 1) * 128);
+		blueprint.addChild(sprite);
 
         blueprint.scale.x = PAGESCALE;
         blueprint.scale.y = PAGESCALE;
