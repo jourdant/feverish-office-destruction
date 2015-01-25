@@ -83,8 +83,8 @@
 				roomcounter = 0;
 			}
 			log2dArray(rooms)
-			constructObjects();
 			constructWalls(rooms);
+			constructObjects();
 			
 			Map.spaces[0][0].player = true;
 		} while(!checkPossibleToComplete({x:0,y:0})[Map.WIDTH - 1][Map.HEIGHT - 1])
@@ -93,13 +93,23 @@
 	function constructObjects() {
 		for(var i = 1; i < Map.WIDTH; i++) {
 			for(var j = 0; j < Map.HEIGHT; j++) {
+				var space = Map.spaces[i][j];
 				if(Math.random() < 0.05) {
-					Map.spaces[i][j].cat = true;
+					space.cat = true;
 				}
 				var objectRandom = Math.random();
-				if(objectRandom >= 0.05 && objectRandom <= 0.10) {
-					Map.spaces[i][j].object = {type: Math.floor(Math.random() * 2)};
-					console.log("object at " + i + " " + j);
+				if(objectRandom >= 0.05 && objectRandom <= 0.10 && !space.object) {
+					var objectType = Math.floor(Math.random() * 4)
+					if(objectType >= 2) {
+						if(i == Map.WIDTH - 1) continue;
+						var otherSpace = Map.spaces[i + 1][j];
+						if(isWallBetween({x:i, y:j}, {x:i+1, y:j}, true)) continue;
+						space.object = {type: objectType};
+						otherSpace.object = {type: objectType + 0.5};
+					} else {
+						space.object = {type: objectType};
+						console.log("object at " + i + " " + j);
+					}
 				}
 			}
 		}
@@ -151,17 +161,17 @@
 		return Math.floor(Math.random() * (MAX_ROOMSIZE - MIN_ROOMSIZE)) + MIN_ROOMSIZE;
 	}
 	
-	function isWallBetween(room1, room2) {
+	function isWallBetween(room1, room2, doorsToo) {
 		var space1 = Map.spaces[room1.x][room1.y];
-		var space2 = Map.spaces[room2.x][room2.y]
+		var space2 = Map.spaces[room2.x][room2.y];
 		if(room2.x == room1.x + 1) {//right
-			return space1.right && !space1.right.door;
+			return space1.right && (doorsToo || !space1.right.door);
 		} else if (room2.y == room1.y + 1) {//down
-			return space1.down && !space1.down.door;
+			return space1.down && (doorsToo || !space1.down.door);
 		} else if (room2.x == room1.x - 1) {//left
-			return space2.right && !space2.right.door;
+			return space2.right && (doorsToo || !space2.right.door);
 		} else { //up
-			return space2.down && !space2.down.door;
+			return space2.down && (doorsToo || !space2.down.door);
 		}
 	}
 	
