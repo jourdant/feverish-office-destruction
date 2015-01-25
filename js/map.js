@@ -96,6 +96,11 @@
 				if(Math.random() < 0.05) {
 					Map.spaces[i][j].cat = true;
 				}
+				var objectRandom = Math.random();
+				if(objectRandom >= 0.05 && objectRandom <= 0.10) {
+					Map.spaces[i][j].object = {type: Math.floor(Math.random() * 4)};
+					console.log("object at " + i + " " + j);
+				}
 			}
 		}
 	}
@@ -172,13 +177,13 @@
 		var down = {x:point.x, y:point.y + 1}
 		var left = {x:point.x - 1, y:point.y}
 		var right = {x:point.x + 1, y:point.y}
-		if(up.y >= 0 && !checkedRooms[up.x][up.y] && !isWallBetween(point, up))
+		if(up.y >= 0 && !checkedRooms[up.x][up.y] && !isWallBetween(point, up) && !Map.spaces[up.x][up.y].object)
 			checkPossibleToComplete(up, checkedRooms);
-		if(down.y < Map.HEIGHT && !checkedRooms[down.x][down.y] && !isWallBetween(point, down))
+		if(down.y < Map.HEIGHT && !checkedRooms[down.x][down.y] && !isWallBetween(point, down) && !Map.spaces[down.x][down.y].object)
 			checkPossibleToComplete(down, checkedRooms);
-		if(right.x < Map.WIDTH && !checkedRooms[right.x][right.y] && !isWallBetween(point, right))
+		if(right.x < Map.WIDTH && !checkedRooms[right.x][right.y] && !isWallBetween(point, right) && !Map.spaces[right.x][right.y].object)
 			checkPossibleToComplete(right, checkedRooms);
-		if(left.x >= 0 && !checkedRooms[left.x][left.y] && !isWallBetween(point, left))
+		if(left.x >= 0 && !checkedRooms[left.x][left.y] && !isWallBetween(point, left) && !Map.spaces[left.x][left.y].object)
 			checkPossibleToComplete(left, checkedRooms);
 		
 		return checkedRooms;

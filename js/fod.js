@@ -28,6 +28,8 @@
     var GAMEOVERTEXTURE = "./img/sprites/gameover.png";
     var FIRETEXTURE = "./img/sprites/fire.png";
     var CATTEXTURE = "./img/sprites/cat.png";
+    var PLANTTEXTURE = "./img/sprites/plant.png";
+    var ARMCHAIRTEXTURE = "./img/sprites/armchair.png";
 
     var SOUNDS = {};
 
@@ -44,6 +46,8 @@
          queue.loadFile({id:"gameovertexture", src: GAMEOVERTEXTURE});
          queue.loadFile({id:"firetexture", src: FIRETEXTURE});
          queue.loadFile({id:"cattexture", src: CATTEXTURE});
+         queue.loadFile({id:"planttexture", src: PLANTTEXTURE});
+         queue.loadFile({id:"armchairtexture", src: ARMCHAIRTEXTURE});
 
          function handleComplete() {
             console.log("Assets loaded.");
@@ -146,6 +150,25 @@
                 blueprint.addChild(sprite);
             }
         }
+		
+		//office objects
+        for (var x = 0; x < Map.WIDTH; x++) {
+            for (var y = 0; y < Map.HEIGHT; y++) {
+				var object = Map.spaces[x][y].object;
+				if(object) {
+					switch (object.type) {
+						case 0:
+							var sprite = createSprite(PLANTTEXTURE, x*128, y*128);
+							blueprint.addChild(sprite);
+							break;
+						case 1:
+							var sprite = createSprite(ARMCHAIRTEXTURE, x*128, y*128);
+							blueprint.addChild(sprite);
+							break;
+					}
+				}
+			}
+		}
 
         //adding walls to map
         for (var x = 0; x < Map.WIDTH; x++) {
@@ -363,6 +386,7 @@
 		if(interjectionTicker){
 			clearInterval(interjectionTicker);
 		}
+		musicIsPlaying = false;
         createjs.Sound.stop();
 		createjs.Sound.play(SOUNDS.SCREWTHIS);
 
