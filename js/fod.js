@@ -374,6 +374,26 @@
     function loaded() {
         //preload assets
         initialiseAssets();
+
+        var elem = document.getElementById("body");
+        swipedetect(elem, function(swipedir){
+            if (swipedir != 'none'){
+                switch (event.keyCode) {
+                    case "left":
+                        handleInput({keyCode: 37});
+                        break;
+                    case "up":
+                        handleInput({keyCode: 38});
+                        break;
+                    case "right":
+                        handleInput({keyCode: 39});
+                        break;
+                    case "down":
+                        handleInput({keyCode: 40});
+                        break;
+                }
+            }
+        });
     }
 	
 	function startLevel() {
