@@ -32,6 +32,10 @@
     var CATTEXTURE = "./img/sprites/cat.png";
     var PLANTTEXTURE = "./img/sprites/plant.png";
     var ARMCHAIRTEXTURE = "./img/sprites/armchair.png";
+    var SOFA1TEXTURE = "./img/sprites/sofa1.png";
+    var SOFA2TEXTURE = "./img/sprites/sofa2.png";
+    var DESK1TEXTURE = "./img/sprites/desk1.png";
+    var DESK2TEXTURE = "./img/sprites/desk2.png";
 
     var SOUNDS = {};
 
@@ -50,6 +54,10 @@
          queue.loadFile({id:"cattexture", src: CATTEXTURE});
          queue.loadFile({id:"planttexture", src: PLANTTEXTURE});
          queue.loadFile({id:"armchairtexture", src: ARMCHAIRTEXTURE});
+         queue.loadFile({id:"sofa1texture", src: SOFA1TEXTURE});
+         queue.loadFile({id:"sofa2texture", src: SOFA2TEXTURE});
+         queue.loadFile({id:"desk1texture", src: DESK1TEXTURE});
+         queue.loadFile({id:"desk2texture", src: DESK2TEXTURE});
 
          function handleComplete() {
             console.log("Assets loaded.");
@@ -165,6 +173,22 @@
 							break;
 						case 1:
 							var sprite = createSprite(ARMCHAIRTEXTURE, x*128, y*128);
+							blueprint.addChild(sprite);
+							break;
+						case 2:
+							var sprite = createSprite(DESK1TEXTURE, x*128, y*128);
+							blueprint.addChild(sprite);
+							break;
+						case 2.5:
+							var sprite = createSprite(DESK2TEXTURE, x*128, y*128);
+							blueprint.addChild(sprite);
+							break;
+						case 3:
+							var sprite = createSprite(SOFA1TEXTURE, x*128, y*128);
+							blueprint.addChild(sprite);
+							break;
+						case 3.5:
+							var sprite = createSprite(SOFA2TEXTURE, x*128, y*128);
 							blueprint.addChild(sprite);
 							break;
 					}
