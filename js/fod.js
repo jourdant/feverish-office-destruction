@@ -97,6 +97,7 @@
         SOUNDS.AREYOUTHERE ="AREYOUTHERE";
         SOUNDS.CAT = "CAT";
 		SOUNDS.INTRO = "INTRO";
+		SOUNDS.THERESSOMETHINGINTHEWAY = "THERESSOMETHINGINTHEWAY";
 
         createjs.Sound.registerSound("sounds/processed/help.mp3", SOUNDS.HELP);
         createjs.Sound.registerSound("sounds/processed/thatsanicefire.mp3", SOUNDS.THATSANICEFIRE);
@@ -114,6 +115,7 @@
         createjs.Sound.registerSound("sounds/processed/areyouthere.mp3", SOUNDS.AREYOUTHERE);
         createjs.Sound.registerSound("sounds/processed/meow.mp3", SOUNDS.CAT);
         createjs.Sound.registerSound("sounds/processed/introfinal.mp3", SOUNDS.INTRO);
+        createjs.Sound.registerSound("sounds/processed/theressomethingintheway.mp3", SOUNDS.THERESSOMETHINGINTHEWAY);
 		
 		createjs.Sound.on("fileload", function(event) {
 			if(event.id == SOUNDS.MUSIC) {
@@ -345,6 +347,10 @@
 		createjs.Sound.play(SOUNDS.ICANTGOTHATWAY);
 	}
 	
+	function theresSomethingInTheWay() {
+		createjs.Sound.play(SOUNDS.THERESSOMETHINGINTHEWAY);
+	}
+	
 	function fire() {
 		if (Fire.fireLocations.length < 50) {
             createjs.Sound.play(SOUNDS.THATSANICEFIRE);
@@ -374,7 +380,7 @@
 			sprite.scale.y = 0.4;
 			blueprint.addChild(sprite);
 		} else if(newSpace.object) {
-			iCantGoThatWay();
+			theresSomethingInTheWay();
 			return false;
 		}
 		return true;
