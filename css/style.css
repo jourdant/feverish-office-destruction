@@ -40,6 +40,19 @@ body {
   overflow: hidden;
 }
 
+#game_instructions {
+  background: url("../img/instructions.png") no-repeat center;
+  background-size: contain;
+  height: 80%;
+
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
 #game_container canvas {
 	position: absolute;
 	top:0;

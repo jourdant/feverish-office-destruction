@@ -48,8 +48,11 @@
 
             handleResize();
 
-            startLevel();
-            
+            var elem = document.getElementById("game_instructions");
+            elem.onclick = function() {
+                startLevel();
+                elem.style.display = "none";
+            }
          }
     }
 
