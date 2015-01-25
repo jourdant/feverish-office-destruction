@@ -12,6 +12,10 @@
     var lastkey = null;
     var lastkeyurgency = 0;
     var level = 102;
+	var interjectionTicker;
+	var deathTicker;
+	
+	var musicIsLoaded = false;
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
@@ -21,6 +25,7 @@
     var STAIRSTECTURE = "./img/sprites/stairs.png";
     var GAMEOVERTEXTURE = "./img/sprites/gameover.png";
     var FIRETEXTURE = "./img/sprites/fire.png";
+    var CATTEXTURE = "./img/sprites/cat.png";
 
     var SOUNDS = {};
 
@@ -36,6 +41,7 @@
          queue.loadFile({id:"stairstexture", src: STAIRSTECTURE});
          queue.loadFile({id:"gameovertexture", src: GAMEOVERTEXTURE});
          queue.loadFile({id:"firetexture", src: FIRETEXTURE});
+         queue.loadFile({id:"cattexture", src: CATTEXTURE});
 
          function handleComplete() {
             console.log("Assets loaded.");
@@ -71,13 +77,8 @@
         SOUNDS.MUSIC= "MUSIC";
         SOUNDS.HELLO = "HELLO";
         SOUNDS.AREYOUTHERE ="AREYOUTHERE";
+        SOUNDS.CAT ="CAT";
 
-		createjs.Sound.on("fileload", function(event) {
-			if(event.id == SOUNDS.MUSIC) {
-				var instance = createjs.Sound.play(SOUNDS.MUSIC, {loop:-1});
-				instance.volume = 0.5;
-			}
-		})
         createjs.Sound.registerSound("sounds/processed/help.mp3", SOUNDS.HELP);
         createjs.Sound.registerSound("sounds/processed/thatsanicefire.mp3", SOUNDS.THATSANICEFIRE);
         createjs.Sound.registerSound("sounds/processed/icantgothatway.mp3", SOUNDS.ICANTGOTHATWAY);
@@ -92,6 +93,15 @@
         createjs.Sound.registerSound("sounds/processed/elevatormusicloop.mp3", SOUNDS.MUSIC);
         createjs.Sound.registerSound("sounds/processed/hello.mp3", SOUNDS.HELLO);
         createjs.Sound.registerSound("sounds/processed/areyouthere.mp3", SOUNDS.AREYOUTHERE);
+        createjs.Sound.registerSound("sounds/processed/meow.mp3", SOUNDS.CAT);
+		
+		createjs.Sound.on("fileload", function(event) {
+			if(event.id == SOUNDS.MUSIC) {
+				var instance = createjs.Sound.play(SOUNDS.MUSIC, {loop:-1});
+				instance.volume = 0.5;
+				musicIsLoaded = true;
+			}
+		})
     }
 
     function initialiseRenderer() {
@@ -259,6 +269,9 @@
 		}
         level--;
 		winnumber++;
+		if(interjectionTicker){
+			clearInterval(interjectionTicker);
+		}
 		startLevel();
 	}
 	
@@ -284,18 +297,23 @@
 	}
 	
 	function cat() {
-		alert("OH NO THE CAAAAATS");
+		createjs.Sound.play(SOUNDS.CAT);
 	}
 	
 	function checkNewSpace(newSpace, newSpacePosition) {
-		if(newSpace.fire){
+		if(newSpace.fire && !newSpace.fire.seen){
+			newSpace.fire.seen = true;
 			fire();
 			var sprite = createSprite(FIRETEXTURE, newSpacePosition.x*128, newSpacePosition.y*128);
 			blueprint.addChild(sprite);
 			return false;
-		} else if(newSpace.cat){ 
-			return false;
+		} else if(newSpace.cat && !newSpace.cat.seen){ 
+			newSpace.cat.seen = true;
 			cat();
+			var sprite = createSprite(CATTEXTURE, newSpacePosition.x*128, newSpacePosition.y*128);
+			sprite.scale.x = 0.4;
+			sprite.scale.y = 0.4;
+			blueprint.addChild(sprite);
 		} else if(newSpace.object) {
 			iCantGoThatWay();
 			return false;
@@ -321,7 +339,6 @@
 			&& (!east || (here.right && !here.right.door) || isObstructed(east))
 			&& (!south || (here.down && !here.down.door) || isObstructed(south))
 			&& (!west || (west.right && !west.right.door) || isObstructed(west))) {
-			clearInterval(interjectionTicker);
             clearInterval(deathTicker);
 			gameOver();
 		}
@@ -332,6 +349,11 @@
 	}
 	
 	function gameOver() {
+		winnumber = 0;
+		level = 102;
+		if(interjectionTicker){
+			clearInterval(interjectionTicker);
+		}
         createjs.Sound.stop();
 		createjs.Sound.play(SOUNDS.SCREWTHIS);
 
@@ -366,10 +388,19 @@
         //create sprites
         initialiseSprites();
 		
-		Fire.begin();
+		Fire.begin(1/Math.pow(1.6, winnumber));
 		
+		lastkey = null;
         interjectionTicker = setInterval(checkForInterjection, 500);
+		if(deathTicker) {
+			clearInterval(deathTicker);
+		}
 		deathTicker = setInterval(checkForDeath, 1000);
+		
+		if(musicIsLoaded) {
+			var instance = createjs.Sound.play(SOUNDS.MUSIC, {loop:-1});
+			instance.volume = 0.5;
+		}
 	}
 
     function unloading() {

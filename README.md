@@ -5,7 +5,7 @@
 Team members:
 
 * Jeffrey Brown
-* Konny Shin
+* Konny Shim
 * [Jourdan Templeton](http://blog.jourdant.me/)
 
 <br/>

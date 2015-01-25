@@ -83,10 +83,21 @@
 				roomcounter = 0;
 			}
 			log2dArray(rooms)
+			constructObjects();
 			constructWalls(rooms);
 			
 			Map.spaces[0][0].player = true;
 		} while(!checkPossibleToComplete({x:0,y:0})[Map.WIDTH - 1][Map.HEIGHT - 1])
+	}
+
+	function constructObjects() {
+		for(var i = 1; i < Map.WIDTH; i++) {
+			for(var j = 0; j < Map.HEIGHT; j++) {
+				if(Math.random() < 0.05) {
+					Map.spaces[i][j].cat = true;
+				}
+			}
+		}
 	}
 	
 	function findEmptyLocation(rooms) {
