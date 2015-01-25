@@ -165,8 +165,9 @@
 		var sprite = createSprite(STAIRSTECTURE, (Map.WIDTH - 1) * 128, (Map.HEIGHT - 1) * 128);
 		blueprint.addChild(sprite);
 
-        blueprint.scale.x = .7*window.innerHeight / 4 / 512;
-        blueprint.scale.y = .7*window.innerHeight / 4 / 512;
+        var shortSide = Math.min(window.innerHeight, window.innerWidth);
+        blueprint.scale.x = .7*shortSide / 4 / 512;
+        blueprint.scale.y = .7*shortSide / 4 / 512;
         stage.addChild(blueprint);
 
         //render base map
@@ -438,9 +439,9 @@
     }
 
     function handleResize() {
-        var height = window.innerHeight;
-        blueprint.scale.x = .7*height / 4 / 512;
-        blueprint.scale.y = .7*height / 4 / 512;
+        var shortSide = Math.min(window.innerHeight, window.innerWidth);
+        blueprint.scale.x = .7*shortSide / 4 / 512;
+        blueprint.scale.y = .7*shortSide / 4 / 512;
 
         var container = document.getElementById("game_container");
         container.offsetWidth = container.offsetHeight;
@@ -448,7 +449,7 @@
 		var border = document.getElementById("game_border");
 		var canvas = container.children[0];
 
-        renderer.resize(height * .7, height * .7);
+        renderer.resize(shortSide * .7, shortSide * .7);
     }
 
     
