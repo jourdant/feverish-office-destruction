@@ -57,7 +57,7 @@
 
             var elem = document.getElementById("game_instructions");
             elem.onclick = function() {
-				if(musicIsLoaded) {
+				if(musicIsLoaded && introIsFinished) {
 					startLevel();
 					elem.style.display = "none";
 				}
@@ -113,7 +113,7 @@
 
     function initialiseRenderer() {
         //create an new instance of a pixi stage
-        stage = new PIXI.Stage(0x6699FF);
+        stage = new PIXI.Stage(0x3b3383);
 
         //create a renderer instance
         renderer = PIXI.autoDetectRenderer(1, 1);
