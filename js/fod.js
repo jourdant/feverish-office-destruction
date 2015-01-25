@@ -56,9 +56,11 @@
 
             var elem = document.getElementById("game_instructions");
             elem.onclick = function() {
-                startLevel();
-                elem.style.display = "none";
-            }
+				if(musicIsLoaded) {
+					startLevel();
+					elem.style.display = "none";
+				}
+			}
          }
     }
 
@@ -97,8 +99,6 @@
 		
 		createjs.Sound.on("fileload", function(event) {
 			if(event.id == SOUNDS.MUSIC) {
-				var instance = createjs.Sound.play(SOUNDS.MUSIC, {loop:-1});
-				instance.volume = 0.5;
 				musicIsLoaded = true;
 			}
 		})
