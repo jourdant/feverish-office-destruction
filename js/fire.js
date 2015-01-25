@@ -1,3 +1,10 @@
+/*
+
+FEVERISH OFFICE DESTRUCTION
+GLOBAL GAME JAM 2015
+JEFFREY BROWN, KONNY SHIM, JOURDAN TEMPLETON
+
+*/
 (function() {
 	Fire = {};
 	var fireLocations = [];
