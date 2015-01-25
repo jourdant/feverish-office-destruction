@@ -17,6 +17,7 @@
 	
 	var musicIsLoaded = false;
 	var introIsFinished = false;
+	var musicIsPlaying = false;
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
@@ -428,9 +429,10 @@
 		}
 		deathTicker = setInterval(checkForDeath, 1000);
 		
-		if(musicIsLoaded && introIsFinished) {
+		if(musicIsLoaded && introIsFinished && !musicIsPlaying) {
 			var instance = createjs.Sound.play(SOUNDS.MUSIC, {loop:-1});
 			instance.volume = 0.5;
+			musicIsPlaying = true;
 		}
 	}
 
