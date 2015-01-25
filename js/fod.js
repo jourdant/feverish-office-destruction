@@ -411,7 +411,7 @@
             }
         });
 
-        elem.onClick = function() {
+        elem.onclick = function() {
             if (gameOverFlag == true) {
                 gameOverFlag = false;
                 startLevel();
