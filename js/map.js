@@ -98,7 +98,7 @@
 				}
 				var objectRandom = Math.random();
 				if(objectRandom >= 0.05 && objectRandom <= 0.10) {
-					Map.spaces[i][j].object = {type: Math.floor(Math.random() * 4)};
+					Map.spaces[i][j].object = {type: Math.floor(Math.random() * 2)};
 					console.log("object at " + i + " " + j);
 				}
 			}
