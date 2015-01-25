@@ -384,27 +384,36 @@
         //preload assets
         initialiseAssets();
 
-        var elem = document.getElementById("game_border");
-        swipedetect(elem, function(swipedir){
-            console.log("[swipe] " + swipedir.direction + " elem: " + swipedir.elem.id);
-            switch (swipedir.direction) {
-                case "left":
-                    handleInput({keyCode: 37});
-                    break;
-                case "up":
-                    handleInput({keyCode: 38});
-                    break;
-                case "right":
-                    handleInput({keyCode: 39});
-                    break;
-                case "down":
-                    handleInput({keyCode: 40});
-                    break;
+        var elem = document.getElementById("game_instructions");
+        swipedetect(elem, function(swipedir1){
+            console.log("[swipe] " + swipedir1.direction + " elem: " + swipedir1.elem.id);
+            switch (swipedir1.direction) {
                 case "none":
-                    swipedir.elem.click();
-                    break;
+                    swipedir1.elem.click();
+                    var elem = document.getElementById("game_border");
+                    swipedetect(elem, function(swipedir){
+                        console.log("[swipe] " + swipedir.direction + " elem: " + swipedir.elem.id);
+                        switch (swipedir.direction) {
+                            case "left":
+                                handleInput({keyCode: 37});
+                            break;
+                            case "up":
+                                handleInput({keyCode: 38});
+                            break;
+                            case "right":
+                                handleInput({keyCode: 39});
+                            break;
+                            case "down":
+                                handleInput({keyCode: 40});
+                            break;
+                            case "none":
+                                swipedir.elem.click();
+                            break;
+                        }
+                        
+                    });
+                break;
             }
-            
         });
     }
 	
