@@ -12,7 +12,10 @@
     var lastkey = null;
     var lastkeyurgency = 0;
     var level = 102;
+	var interjectionTicker;
 	var deathTicker;
+	
+	var musicIsLoaded = false;
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
@@ -73,12 +76,6 @@
         SOUNDS.AREYOUTHERE ="AREYOUTHERE";
         SOUNDS.CAT ="CAT";
 
-		createjs.Sound.on("fileload", function(event) {
-			if(event.id == SOUNDS.MUSIC) {
-				var instance = createjs.Sound.play(SOUNDS.MUSIC, {loop:-1});
-				instance.volume = 0.5;
-			}
-		})
         createjs.Sound.registerSound("sounds/processed/help.mp3", SOUNDS.HELP);
         createjs.Sound.registerSound("sounds/processed/thatsanicefire.mp3", SOUNDS.THATSANICEFIRE);
         createjs.Sound.registerSound("sounds/processed/icantgothatway.mp3", SOUNDS.ICANTGOTHATWAY);
@@ -94,6 +91,14 @@
         createjs.Sound.registerSound("sounds/processed/hello.mp3", SOUNDS.HELLO);
         createjs.Sound.registerSound("sounds/processed/areyouthere.mp3", SOUNDS.AREYOUTHERE);
         createjs.Sound.registerSound("sounds/processed/meow.mp3", SOUNDS.CAT);
+		
+		createjs.Sound.on("fileload", function(event) {
+			if(event.id == SOUNDS.MUSIC) {
+				var instance = createjs.Sound.play(SOUNDS.MUSIC, {loop:-1});
+				instance.volume = 0.5;
+				musicIsLoaded = true;
+			}
+		})
     }
 
     function initialiseRenderer() {
@@ -261,6 +266,9 @@
 		}
         level--;
 		winnumber++;
+		if(interjectionTicker){
+			clearInterval(interjectionTicker);
+		}
 		startLevel();
 	}
 	
@@ -328,7 +336,6 @@
 			&& (!east || (here.right && !here.right.door) || isObstructed(east))
 			&& (!south || (here.down && !here.down.door) || isObstructed(south))
 			&& (!west || (west.right && !west.right.door) || isObstructed(west))) {
-			clearInterval(interjectionTicker);
             clearInterval(deathTicker);
 			gameOver();
 		}
@@ -341,6 +348,9 @@
 	function gameOver() {
 		winnumber = 0;
 		level = 102;
+		if(interjectionTicker){
+			clearInterval(interjectionTicker);
+		}
         createjs.Sound.stop();
 		createjs.Sound.play(SOUNDS.SCREWTHIS);
 
@@ -377,11 +387,17 @@
 		
 		Fire.begin(1/Math.pow(1.6, winnumber));
 		
+		lastkey = null;
         interjectionTicker = setInterval(checkForInterjection, 500);
 		if(deathTicker) {
 			clearInterval(deathTicker);
 		}
 		deathTicker = setInterval(checkForDeath, 1000);
+		
+		if(musicIsLoaded) {
+			var instance = createjs.Sound.play(SOUNDS.MUSIC, {loop:-1});
+			instance.volume = 0.5;
+		}
 	}
 
     function unloading() {
