@@ -16,6 +16,7 @@
 	var deathTicker;
 	
 	var musicIsLoaded = false;
+	var introIsFinished = false;
 	
 	var SCALEFACTOR = 0.25;
     var PAGESCALE = 0.375;
@@ -79,7 +80,8 @@
         SOUNDS.MUSIC= "MUSIC";
         SOUNDS.HELLO = "HELLO";
         SOUNDS.AREYOUTHERE ="AREYOUTHERE";
-        SOUNDS.CAT ="CAT";
+        SOUNDS.CAT = "CAT";
+		SOUNDS.INTRO = "INTRO";
 
         createjs.Sound.registerSound("sounds/processed/help.mp3", SOUNDS.HELP);
         createjs.Sound.registerSound("sounds/processed/thatsanicefire.mp3", SOUNDS.THATSANICEFIRE);
@@ -96,10 +98,15 @@
         createjs.Sound.registerSound("sounds/processed/hello.mp3", SOUNDS.HELLO);
         createjs.Sound.registerSound("sounds/processed/areyouthere.mp3", SOUNDS.AREYOUTHERE);
         createjs.Sound.registerSound("sounds/processed/meow.mp3", SOUNDS.CAT);
+        createjs.Sound.registerSound("sounds/processed/introfinal.mp3", SOUNDS.INTRO);
 		
 		createjs.Sound.on("fileload", function(event) {
 			if(event.id == SOUNDS.MUSIC) {
 				musicIsLoaded = true;
+			}
+			if(event.id == SOUNDS.INTRO) {
+				var instance = createjs.Sound.play(SOUNDS.INTRO);
+				instance.on("complete", function() {introIsFinished = true;}, this);
 			}
 		})
     }
@@ -420,7 +427,7 @@
 		}
 		deathTicker = setInterval(checkForDeath, 1000);
 		
-		if(musicIsLoaded) {
+		if(musicIsLoaded && introIsFinished) {
 			var instance = createjs.Sound.play(SOUNDS.MUSIC, {loop:-1});
 			instance.volume = 0.5;
 		}
