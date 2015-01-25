@@ -375,24 +375,27 @@
         //preload assets
         initialiseAssets();
 
-        var elem = document.getElementById("body");
+        var elem = document.getElementById("game_border");
         swipedetect(elem, function(swipedir){
-            if (swipedir != 'none'){
-                switch (event.keyCode) {
-                    case "left":
-                        handleInput({keyCode: 37});
-                        break;
-                    case "up":
-                        handleInput({keyCode: 38});
-                        break;
-                    case "right":
-                        handleInput({keyCode: 39});
-                        break;
-                    case "down":
-                        handleInput({keyCode: 40});
-                        break;
-                }
+            console.log("[swipe] " + swipedir.direction + " elem: " + swipedir.elem.id);
+            switch (swipedir.direction) {
+                case "left":
+                    handleInput({keyCode: 37});
+                    break;
+                case "up":
+                    handleInput({keyCode: 38});
+                    break;
+                case "right":
+                    handleInput({keyCode: 39});
+                    break;
+                case "down":
+                    handleInput({keyCode: 40});
+                    break;
+                case "none":
+                    swipedir.elem.click();
+                    break;
             }
+            
         });
     }
 	
