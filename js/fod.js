@@ -14,6 +14,8 @@
     var level = 102;
 	var interjectionTicker;
 	var deathTicker;
+
+    var gameOverFlag = false;
 	
 	var musicIsLoaded = false;
 	var introIsFinished = false;
@@ -394,8 +396,29 @@
         message.scale.x = 1;
         message.scale.y = 1;
         blueprint.addChild(message);
+        gameOverFlag = true;
 
-		setTimeout(startLevel, 5000);
+        var elem = document.getElementById("game_container");
+        swipedetect(elem, function(swipedir1){
+            console.log("[swipe] " + swipedir1.direction + " elem: " + swipedir1.elem.id);
+            switch (swipedir1.direction) {
+                case "none":
+                    if (gameOverFlag == true) {
+                        gameOverFlag = false;
+                        startLevel();
+                    }
+                break;
+            }
+        });
+
+        elem.onClick = function() {
+            if (gameOverFlag == true) {
+                gameOverFlag = false;
+                startLevel();
+            }
+        }
+
+		//setTimeout(startLevel, 5000);
 	}
 
     function updateLevelText() {
