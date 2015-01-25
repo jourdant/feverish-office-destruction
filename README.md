@@ -8,7 +8,12 @@ Team members:
 * Konny Shim
 * [Jourdan Templeton](http://blog.jourdant.me/)
 
+[Click here](http://globalgamejam.org/2015/games/feverish-office-destruction) to see our entry on the Global Game Jam 2015 website. 
+
 <br/>
+
+##Disclamier
+The code started off really beautiful and neatly structured. As time went on, the amount of hacks increased. **TODO: refactor ./js/fod.js.**
 
 ##Concept
 You are an emergency services operator. Georg(e|ina) calls in desperation as his/her building is on fire!!!
@@ -21,6 +26,13 @@ Your mission is to help Georg(e|ina) escape almost certain death. Guide Georg(e|
 
 ##Controls
 Up, Down, Left, Right
+<br/><br/>
+
+##Deployment
+
+* Clone repo
+* Host with your web server of choice (node support through server.js)
+* Enjoy!
 <br/><br/>
 
 ##Credits
