@@ -220,6 +220,7 @@
     }
 
     function handleInput(event) {
+        if (gameOverFlag == true) {return;}
         switch (event.keyCode) {
             case 37:
                 console.log("left");
